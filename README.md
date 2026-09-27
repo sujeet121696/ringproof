@@ -1,4 +1,6 @@
-# Ringproof 🛡️📞
+<p align="center"><img src="assets/logo.svg" alt="Ringproof" width="320"></p>
+
+# Ringproof
 
 **A real-time voice-fraud defense agent — the "immune system" for voice-cloning scams.**
 

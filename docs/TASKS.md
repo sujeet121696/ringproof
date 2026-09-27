@@ -5,6 +5,8 @@
 ## 1. Setup
 - [x] Lock idea, name and track
 - [x] Project docs
+- [x] Logo + favicon (`assets/`)
+- [ ] Wire the favicon into the dashboard; add PNG/ICO fallbacks for older browsers
 - [ ] Claim Nebius credit ($25 event code + $25 Builders Program)
 - [ ] Choose backend and dashboard stack, and record it in `ARCHITECTURE.md`
 - [ ] Scaffold repo + `.env.example`

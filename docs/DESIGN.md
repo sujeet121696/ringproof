@@ -26,7 +26,20 @@
 | Frame risk around *behavior* ("asked for secrecy + a wire transfer"), not "fake voice" | Detection is over content, not acoustics |
 | Demo uses sample audio, not live calls | Live telephony is out of scope (see PRD) |
 
-## 4. Open questions
+## 4. Brand
 
-- Visual style, colors and UI framework.
+| Asset | File | Use |
+|---|---|---|
+| Logo | `assets/logo.svg` | README, dashboard header, demo video |
+| Mark | `assets/logo-mark.svg` | Square spots: avatar, app icon |
+| Favicon | `assets/favicon.svg` | Browser tab: `<link rel="icon" href="/favicon.svg" type="image/svg+xml">` |
+
+- **Concept:** a shield (protection) around a phone handset (the call).
+- **Colors:** indigo `#4F46E5` → sky `#0EA5E9` gradient; text slate `#0F172A` (dark mode `#F1F5F9`).
+- **Wordmark:** "Ring" + "proof" in the accent color, using the system sans-serif bold.
+- The handset glyph is Material Icons "call" (Apache-2.0).
+
+## 5. Open questions
+
+- UI framework and the rest of the visual style.
 - How to show the trusted-contact alert: a mock phone notification, or a real SMS or email?
