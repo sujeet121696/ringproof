@@ -5,7 +5,7 @@
 Ringproof listens to a call, transcribes it live, and reasons over what's actually being said to catch scam behavior (urgency + secrecy + a money-transfer ask) before money moves. High-risk calls trigger an out-of-band verification challenge and alert a trusted contact — instead of just flagging risk after the fact.
 
 > Built for the **Nebius × NVIDIA Global AI Hackathon** — Track: **Personal AI** (fallback: Best Apps and Agents).
-> Status: **pre-build.** Idea locked; build starts after TGPF Stage 2 wraps (Sept 27).
+> Status: **pre-build.** Idea locked; nothing implemented yet. Deadline: Oct 30.
 
 ## The Problem
 
@@ -36,8 +36,10 @@ Demo scope is upload/stream of sample scam-vs-real call audio through a dashboar
 
 ## Docs
 
-- [`docs/DESIGN.md`](docs/DESIGN.md) — full design: architecture, tech stack, track rationale, naming history, open risks.
-
-## Status
-
-Nothing is built yet. This repo currently holds design docs only — code starts after TGPF Stage 2 (Sept 25–26, Bangalore).
+| File | Contents |
+|---|---|
+| [`docs/PRD.md`](docs/PRD.md) | Problem, goals, scope, constraints, risks |
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Pipeline, stack, modules, fallbacks |
+| [`docs/RULES.md`](docs/RULES.md) | Coding and workflow rules |
+| [`docs/DESIGN.md`](docs/DESIGN.md) | Dashboard UI/UX direction |
+| [`docs/TASKS.md`](docs/TASKS.md) | Build checklist and progress |
