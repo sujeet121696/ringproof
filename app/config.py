@@ -1,0 +1,14 @@
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+    nebius_api_key: str = ""
+    nebius_base_url: str = "https://api.tokenfactory.nebius.com/v1"
+    reasoning_model: str = "nvidia/Nemotron-3-Ultra-550b-a55b"
+    provider: str = "nebius"
+    tavily_api_key: str = ""
+
+
+settings = Settings()

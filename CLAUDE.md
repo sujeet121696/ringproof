@@ -1,16 +1,17 @@
 # Ringproof
 
-Real-time voice-fraud defense agent. It transcribes a call, scores the transcript for scam
-behavior, and on high risk triggers an out-of-band verification challenge and a trusted-contact
-alert.
+Personal voice-fraud defense agent. It transcribes a call, scores it against a private,
+user-controlled memory of the family ("is this unusual for this person?"), and on high risk
+triggers a personal verification challenge (family code word) and a trusted-contact alert.
 
 ## Snapshot
 
 | | |
 |---|---|
 | Hackathon | Nebius × NVIDIA Global AI Hackathon |
-| Track | Personal AI (fallback: Best Apps and Agents) |
+| Track | Personal AI (family memory + data control are core) |
 | Deadline | Oct 30, 2026 |
+| Stack | Python + FastAPI backend, React + Vite dashboard |
 | Team | Solo |
 | Status | Pre-build |
 

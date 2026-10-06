@@ -8,23 +8,43 @@
 - **Show the reasoning.** Explain *why* a call is risky (signals + quoted lines), not just a number.
 - **The intervention is the climax.** The challenge and alert are the most visible moment of the
   demo.
+- **Memory is visible.** Show which profile was used and how the call differs from it
+  ("Rahul calls you Maa; this caller said Madam").
+- **Control is obvious.** The user can always see what Ringproof remembers and delete it in one
+  click.
 
 ## 2. Layout (draft)
 
+**Call view**
+
 | Panel | Shows |
 |---|---|
-| Input | Sample picker (scam/real), upload, or stream |
+| Input | Sample picker (scam/real) or upload |
 | Live transcript | Speaker-labelled lines that auto-scroll; lines that triggered a signal are highlighted |
+| Caller | Who the caller claims to be, and the matching profile card (or "unknown") |
 | Risk meter | Low, medium or high, updating live |
-| Signals | Urgency, secrecy, transfer ask and impersonation, each lit with its triggering quote |
-| Actions | Idle, then challenge issued, then trusted contact alerted |
+| Signals | Urgency, secrecy, transfer ask, impersonation, isolation and out-of-character, each lit with its triggering quote |
+| Actions | Idle, then personal challenge issued ("Ask for the family code word"), then trusted contact alerted |
+| Official check | The claimed organisation, its official helpline, one warning line, and the source link (from Tavily) |
+
+**Memory view**
+
+| Panel | Shows |
+|---|---|
+| Contacts | One card per trusted contact; add, edit, delete |
+| Household rules | Rules for every call, plus which contact gets alerted |
+| Data control | What's stored, "Delete all" button, and a note that calls are never stored |
 
 ## 3. Decisions
 
 | Decision | Reason |
 |---|---|
 | Frame risk around *behavior* ("asked for secrecy + a wire transfer"), not "fake voice" | Detection is over content, not acoustics |
+| Frame risk around *this person* ("unusual for Rahul") when a profile exists | Memory is the differentiator; make it visible |
+| The code word is shown masked (`••••`) in the UI | It's a secret |
 | Demo uses sample audio, not live calls | Live telephony is out of scope (see PRD) |
+| UI copy in plain English; transcripts shown in the call's language | English is primary; Hindi/Hinglish is a stretch goal (see PRD) |
+| High-risk screen gives one clear instruction ("Hang up. Call 1930.") | Elderly users under pressure need one action, not a report |
 
 ## 4. Brand
 
@@ -41,5 +61,4 @@
 
 ## 5. Open questions
 
-- UI framework and the rest of the visual style.
-- How to show the trusted-contact alert: a mock phone notification, or a real SMS or email?
+- Visual style beyond the brand colors (React + Vite is decided).

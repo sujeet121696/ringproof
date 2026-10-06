@@ -2,39 +2,38 @@
 
 # Ringproof
 
-**A real-time voice-fraud defense agent — the "immune system" for voice-cloning scams.**
+**A personal AI that knows your family and stops "digital arrest" and impersonation scams mid-call.**
 
-Ringproof listens to a call, transcribes it live, and reasons over what's actually being said to catch scam behavior (urgency + secrecy + a money-transfer ask) before money moves. High-risk calls trigger an out-of-band verification challenge and alert a trusted contact — instead of just flagging risk after the fact.
+Ringproof listens to a call, transcribes it live, and checks what's being said against a private memory of your family: how each trusted contact talks, what they usually ask for, and a shared code word. A call that's unusual *for that person* (urgency + secrecy + a money ask) triggers a personal verification challenge ("ask for the family code word") and alerts a trusted contact before money moves. Your memory stays yours: view it, edit it, delete it; calls are never stored.
 
-> Built for the **Nebius × NVIDIA Global AI Hackathon** — Track: **Personal AI** (fallback: Best Apps and Agents).
+> Built for the **Nebius × NVIDIA Global AI Hackathon** — Track: **Personal AI**.
 > Status: **pre-build.** Idea locked; nothing implemented yet. Deadline: Oct 30.
 
 ## The Problem
 
-Voice-cloning scams — fake CEO wire-transfer requests, fake "kidnapped" family members, cloned-voice bank fraud — are a fast-growing, multi-billion-dollar problem. Most existing defenses (spam-call blockers, caller ID) catch *unknown* numbers, not a cloned voice of someone the victim trusts, mid-conversation, while it's happening.
+In India, "digital arrest" scams target elderly people. A caller posing as a CBI, police or customs officer says the victim is linked to a crime, orders them to stay on the call and tell no one, and makes them transfer money to "clear their name." A second pattern uses a fake family member in trouble, sometimes with a cloned voice. Spam blockers and caller ID catch *unknown* numbers. They don't catch a convincing official or a familiar voice mid-call, and they know nothing about *your* family.
 
 ## The Solution
 
 ```
-Call audio (sample upload/stream)
-        │
-        ▼
-NVIDIA speech model (Parakeet/Canary) ──▶ live transcript
-        │
-        ▼
-Nemotron 3 Ultra ──▶ scam-behavior risk score
-        │
-   ┌────┴────┐
-   ▼         ▼
- low/med    high risk
- → log      → out-of-band verification challenge + trusted-contact alert
+Call audio ──▶ Parakeet/Canary ──▶ transcript
+                                      │
+        Family memory (private) ──▶ Nemotron 3 Ultra on Nebius
+                                      │  "is this unusual for this person?"
+                                 ┌────┴────┐
+                                 ▼         ▼
+                              low/med     high
+                              → log       → family code-word challenge
+                                          + official helpline (Tavily lookup)
+                                          + alert to a trusted contact
 ```
 
-- **Transcription:** an NVIDIA speech model (NeMo Parakeet/Canary) turns the call into text.
-- **Reasoning:** Nemotron 3 Ultra, served on Nebius, scores the transcript for scam patterns.
-- **Action:** high-risk calls don't just get flagged — they trigger a real intervention (verification challenge + alert), which is what makes this an agent, not a classifier.
+- **Transcription:** NVIDIA Parakeet/Canary turns the call into text. English is primary; Hindi/Hinglish is a stretch goal.
+- **Memory:** a private profile for each trusted contact (how they talk, what they usually ask for, a family code word). You can view, edit and delete it; calls are never stored.
+- **Reasoning:** Nemotron 3 Ultra on Nebius scores the call against that memory, and against digital-arrest patterns (impersonated authority, isolation, secrecy, urgency, transfer ask).
+- **Action:** high-risk calls trigger a personal challenge, show the real official helpline (looked up with Tavily from official sites only), and alert a trusted contact.
 
-Demo scope is upload/stream of sample scam-vs-real call audio through a dashboard — not live telephony interception (that's a post-hackathon product concern).
+Demo scope: sample calls through a dashboard, not live telephony interception (a post-hackathon concern).
 
 ## Docs
 
