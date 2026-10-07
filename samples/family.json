@@ -1,0 +1,41 @@
+{
+  "_note": "Demo family memory (fictional). In the app this lives only in the browser (IndexedDB); this file seeds the demo.",
+  "user": {
+    "name": "Kamala Verma",
+    "called": "Maa",
+    "age": 68,
+    "city": "Lucknow"
+  },
+  "contacts": [
+    {
+      "id": "rahul",
+      "name": "Rahul",
+      "relation": "son",
+      "addresses_user_as": "Maa",
+      "usual_topics": ["dinner plans", "rides to the doctor", "weekend visits", "her health"],
+      "never": ["asks for money over the phone", "asks her to keep secrets from Papa"],
+      "past_requests": [
+        { "date": "2026-03", "what": "Asked for ₹2,000 for a train ticket, repaid the same week" }
+      ],
+      "code_word": "gulmohar",
+      "email": "rahul@example.com"
+    },
+    {
+      "id": "anjali",
+      "name": "Anjali",
+      "relation": "daughter",
+      "addresses_user_as": "Mummy",
+      "usual_topics": ["Sunday video calls", "grandchildren", "recipes"],
+      "never": ["asks for money"],
+      "past_requests": [],
+      "code_word": null,
+      "email": "anjali@example.com"
+    }
+  ],
+  "household_rules": [
+    "My bank never asks for an OTP, PIN or password on a call.",
+    "Police and the CBI never arrest anyone over a phone or video call.",
+    "No government agency asks for money to be moved to a 'verification' or 'safe' account."
+  ],
+  "alert_contact": "rahul"
+}

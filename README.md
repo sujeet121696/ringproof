@@ -7,7 +7,7 @@
 Ringproof listens to a call, transcribes it live, and checks what's being said against a private memory of your family: how each trusted contact talks, what they usually ask for, and a shared code word. A call that's unusual *for that person* (urgency + secrecy + a money ask) triggers a personal verification challenge ("ask for the family code word") and alerts a trusted contact before money moves. Your memory stays yours: view it, edit it, delete it; calls are never stored.
 
 > Built for the **Nebius × NVIDIA Global AI Hackathon** — Track: **Personal AI**.
-> Status: **pre-build.** Idea locked; nothing implemented yet. Deadline: Oct 30.
+> Status: **early build.** Repo scaffolded; core pipeline in progress. Deadline: Oct 30.
 
 ## The Problem
 
@@ -44,3 +44,4 @@ Demo scope: sample calls through a dashboard, not live telephony interception (a
 | [`docs/RULES.md`](docs/RULES.md) | Coding and workflow rules |
 | [`docs/DESIGN.md`](docs/DESIGN.md) | Dashboard UI/UX direction |
 | [`docs/TASKS.md`](docs/TASKS.md) | Build checklist and progress |
+| [`docs/VISION.md`](docs/VISION.md) | Post-hackathon: guardian agent, channels, privacy, scaling |

@@ -9,7 +9,10 @@
 - All model calls go through the provider-abstraction layer. Never call a provider SDK directly.
 - The risk engine returns structured output (`score`, `signals`, `rationale`, `claimed_contact`,
   `claimed_org`), never free text.
-- Keep modules separate: ingest, transcriber, memory, risk engine, lookup, action layer, dashboard.
+- Keep modules separate: call source, transcriber, memory, risk engine, policy, tools, dashboard.
+- The model assesses; code decides. Which action to take comes from the policy table, never from
+  the model's free text.
+- Every channel (replay, upload, later telephony) goes through the call source interface.
 
 ## 2. Secrets and data
 

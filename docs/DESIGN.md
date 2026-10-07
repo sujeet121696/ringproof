@@ -55,10 +55,31 @@
 | Favicon | `assets/favicon.svg` | Browser tab: `<link rel="icon" href="/favicon.svg" type="image/svg+xml">` |
 
 - **Concept:** a shield (protection) around a phone handset (the call).
-- **Colors:** indigo `#4F46E5` → sky `#0EA5E9` gradient; text slate `#0F172A` (dark mode `#F1F5F9`).
+- **Logo colors (current):** indigo `#4F46E5` → sky `#0EA5E9` gradient. See open questions.
 - **Wordmark:** "Ring" + "proof" in the accent color, using the system sans-serif bold.
 - The handset glyph is Material Icons "call" (Apache-2.0).
 
-## 5. Open questions
+## 5. Dashboard palette and type
 
-- Visual style beyond the brand colors (React + Vite is decided).
+**Decided 2026-10-07:** the dashboard reuses the kharidwise palette, fonts and theming
+(`D:\Git\kharidwise\kharidwise\plan\docs\10-design.md`). Tokens live in `web/src/index.css`.
+
+| Token | Light | Dark | Use |
+|---|---|---|---|
+| `--fg` | Deep Navy `#0A2540` | `#E6E8EB` | Text, primary buttons |
+| `--bg` / `--card-bg` | `#F6F4FB` / white | `#14161A` / `#1A1D22` | Page / cards |
+| `--muted`, `--line` | `#5C6B80`, `#DDE3EA` | `#9AA2AD`, `#2B2F36` | Secondary text, borders |
+| `--accent` | `#0077B6` | `#00B0FF` | Links |
+| `--accent-green` | AI Green `#00C853` | same | Fills and badges only, never small text (fails contrast on white) |
+| `--accent-cyan` | Cyan `#00B0FF` | same | Highlights, hovers |
+| `--accent-lavender`, `--note-bg` | `#D1C4E9`, `#F3EFFA` | same, `#211F2B` | **Family memory** cards and notes |
+| `--risk-low` / `--risk-medium` / `--risk-high` | `#00C853` / `#FFB300` / `#D32F2F` | high: `#EF5350` | Risk meter. Always paired with a word ("High risk") and shape, never colour alone |
+
+- **Fonts:** Bricolage Grotesque 700–800 for headings and the risk level, Figtree 400–700 for text.
+  Self-hosted in `web/public/fonts/` (SIL Open Font License), copied from kharidwise.
+- **Themes:** light, dark and system via `data-theme` on `<html>`; `web/public/theme-init.js` applies
+  a saved choice before paint (same as kharidwise).
+
+## 6. Open questions
+
+- The logo still uses the indigo → sky gradient. Recolour it to navy → cyan to match the dashboard?

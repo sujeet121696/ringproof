@@ -68,7 +68,7 @@ the call.
 | Usual topics and asks | Dinner plans, rides; never money over the phone |
 | Past requests | Asked for ₹2,000 for a train ticket in March |
 | Family code word | Shared secret, used in the challenge |
-| Email | Where the OTP fallback code goes |
+| Email | Where the "Is this you?" check and alerts go |
 
 **Memory: household rules** (apply to every call)
 
@@ -132,8 +132,8 @@ generic scam classifiers. G2–G6 together are the differentiator.
 **Budget**
 - Free credit: $25 (event code `NEBIUS-DEVPOST-GLOBAL26`) + $25 (Nebius Builders Program) = **$50**.
   The repo must be public, so decide before submitting whether this code stays in it.
-- Model calls: cents. Nemotron 3 Ultra costs about $1.20 per 1M tokens.
-- GPU for transcription (only if Nebius doesn't host Parakeet): about $1–3/hour, kept to a few
+- Model calls: cents. Nemotron 3 Ultra on Token Factory: $1 per 1M input, $3 per 1M output tokens (checked Oct 6); a scoring call is ~530 tokens.
+- GPU for transcription (Token Factory has no ASR models, so this is needed): about $1–3/hour, kept to a few
   hours in total by transcribing each sample once (see ARCHITECTURE §4).
 - Parakeet/Canary weights are open (CC-BY-4.0).
 - **Never** use multiple accounts to re-claim a promo. It's a ToS and disqualification risk.
@@ -153,9 +153,7 @@ generic scam classifiers. G2–G6 together are the differentiator.
 
 ## 8. Background
 
-**Startup angle**
-- B2C: family and elder-protection subscription.
-- B2B: fintech and call-center API, priced per minute.
+**After the hackathon:** Ringproof continues as a family guardian agent. See [VISION.md](VISION.md).
 
 **Naming history**
 - *SonicGuard* was dropped because NVIDIA Sonic is a robotics control model with no audio

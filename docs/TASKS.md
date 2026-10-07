@@ -35,7 +35,9 @@
     Nemotron. If signals are caught correctly, keep Hindi/Hinglish; otherwise drop to post-hackathon
 8. [ ] Write and record English sample calls (synthetic or consented only): digital-arrest scam,
     fake-family-member scam, real family call, real bank call
-9. [ ] Write the demo family: Maa + Rahul (+ 1 more) profiles that match the sample calls
+    - [x] Scripts written as timed transcripts with expected results (`samples/calls/`, Oct 6)
+    - [ ] Record audio
+9. [x] Write the demo family: Maa + Rahul + Anjali profiles + household rules (`samples/family.json`)
 
 ## Week 2 · Oct 5 – 11 · Core pipeline → M2
 10. [ ] Audio ingest: upload a file and split it into chunks
@@ -43,8 +45,12 @@
     (English; plus Hindi/Hinglish route if the go/no-go passed)
 12. [ ] Family memory in the browser (IndexedDB): profiles + household rules, CRUD + delete-all
 13. [ ] Port Resolve's `brain.ts` to Python: provider layer with `mock` + Nemotron modes
+    (Ultra primary, Super fallback)
 14. [ ] Risk engine: identify the claimed caller, load their profile, score against it
     (structured output `{ score, signals[], rationale, claimed_contact, claimed_org }`)
+14a. [ ] Call source interface (replay first) + call session over WebSocket that streams
+    transcript, risk and action events (ARCHITECTURE §10)
+14b. [ ] Policy table in code: signals + caller type → action (the model never picks the action)
 15. [ ] Run all samples through and tune the prompt until scam and real separate cleanly,
     with and without a matching profile
 
@@ -52,7 +58,8 @@
 16. [ ] Lookup module: Tavily search with the official-domain allowlist + built-in verified numbers
     (verify 1930 and every built-in number against an official source)
 17. [ ] Action layer: challenge by caller type (ARCHITECTURE §9): code word checked in the
-    browser, OTP fallback ported from Resolve's `otp.ts`, "hang up + helpline" for organisations
+    browser, "Is this you?" one-tap email check to the real contact, "hang up + helpline" for
+    organisations
 18. [ ] Action layer: trusted-contact alert by email, ported from Resolve's `mailer.ts`
 19. [ ] Dashboard: input panel + live transcript
 20. [ ] Dashboard: risk meter + signals panel with triggering quotes
@@ -69,6 +76,9 @@
 28. [ ] Deploy to a public **demo URL** (required)
 29. [ ] If Hindi/Hinglish is in: record one Hinglish digital-arrest sample and add it to the demo
 30. [ ] Full dry run with every sample on the deployed URL, and fix what breaks
+30a. [ ] **Stretch, only if M3 is done by Oct 18:** a live call through a Vobiz number
+    (Vobiz call source → Parakeet on GPU → same agent), recorded for the demo video only.
+    Listen-only; the agent talking back stays post-hackathon (VISION §3a)
 
 ## Week 5 · Oct 26 – 29 · Submission → M5
 31. [ ] README: differentiation story (family memory + personal challenge + Tavily lookup),

@@ -38,16 +38,16 @@ Call audio (sample upload/stream)          [M] Family memory
 | Trusted-contact alert | Email (SMTP) | Same app as the backend |
 
 **Decided 2026-09-27:** Python backend + React dashboard. Python keeps the backend in the same
-language as the transcription models (NeMo, Whisper). Resolve's `brain.ts`, `otp.ts` and
-`mailer.ts` are ported to Python rather than copied.
+language as the transcription models (NeMo, Whisper). Resolve's `brain.ts` and `mailer.ts` are
+ported to Python rather than copied (`otp.ts` is no longer needed, see §9).
 
 **Repo layout**
 
 ```
 ringproof/
-├── app/        backend: FastAPI, brain, risk engine, lookup, otp, mailer
+├── app/        backend: FastAPI, call sources, brain, risk engine, policy, tools (lookup, verify, mailer)
 ├── web/        dashboard: React + Vite
-├── asr/        transcription service (Python + NeMo), only if Nebius doesn't host Parakeet
+├── asr/        transcription service (Python + NeMo) on a Nebius AI Cloud GPU
 ├── samples/    sample calls + cached transcripts
 ├── assets/     logo + favicon
 └── docs/
@@ -57,12 +57,14 @@ ringproof/
 
 | Module | Input | Output |
 |---|---|---|
+| Call source | Sample replay now; upload, telephony or companion later | Stream of transcript segments (one interface for every channel) |
 | Audio ingest | Uploaded or streamed audio | Audio chunks |
 | Transcriber | Audio chunks | Transcript segments with speaker turns |
 | Family memory (browser) | User edits | Profiles + household rules (CRUD + delete-all) |
 | Risk engine | Transcript window + contact names + claimed caller's profile | `{ score, signals[], rationale, claimed_contact, claimed_org }` |
 | Lookup | `claimed_org` | `{ official_helpline, warnings[], sources[] }` |
-| Action layer | High-risk result + profile + lookup | Personal challenge + helpline + trusted-contact alert |
+| Policy | Risk result + caller type | Which action to take (plain code, not the model) |
+| Action layer (tools) | Policy decision + profile + lookup | Personal challenge, "Is this you?" check, helpline, trusted-contact alert |
 | Dashboard | All of the above | Live transcript, risk meter, signals, actions, memory view |
 
 ## 4. Cached transcripts (cost control)
@@ -82,14 +84,14 @@ calls) for building the dashboard.
 
 | Call | Primary | Fallback |
 |---|---|---|
-| Reasoning | Nemotron 3 Ultra on Nebius | Equivalent open model on another host (OpenRouter/Groq) |
+| Reasoning | Nemotron 3 Ultra on Nebius | Nemotron 3 Super on Nebius (same API, cheaper; stays NVIDIA + Nebius) |
 | Transcription | Parakeet on Nebius | Cached transcripts (demo); self-hosted weights elsewhere (dev only) |
 
-These fallbacks give resilience across *different* providers' free tiers. They are not
-credit-stacking on the Nebius promo.
+The reasoning fallback swaps to a smaller Nemotron on the same Token Factory account, so the
+demo stays on Nebius and NVIDIA models even when Ultra is slow or rate-limited.
 
-**Rule:** the hackathon requires the project to run on Nebius. The **demo** must use the Nebius
-primaries. Non-Nebius fallbacks are for development outages only, never for the submitted demo.
+**Rule:** the hackathon requires the project to run on Nebius. The **demo** must use Nebius.
+Non-Nebius hosts (self-hosted ASR weights) are for development only, never for the submitted demo.
 
 ## 6. Languages
 
@@ -133,6 +135,19 @@ The challenge depends on who the caller claims to be:
 | Caller claims to be | Challenge |
 |---|---|
 | Family member **with** a code word | "Ask the caller our family code word." The browser checks the caller's answer in the transcript against the stored code word, which never leaves the browser. |
-| Family member **without** a code word | OTP fallback, ported from Resolve's `otp.ts` (expiry, attempt limits, lockout): a code is emailed to the *real* contact, and the caller must read it back. |
+| Family member **without** a code word | **"Is this you?" check:** the *real* contact gets an email with a one-tap "Yes, it's me" / "No, it's not me" link. A "No" immediately tells the user to hang up. Replaces the earlier OTP idea: simpler for the contact, and it pulls the real family member in. |
 | An organisation (CBI, police, bank…) | No challenge, because the caller can't be verified mid-call. Instruction: "Hang up and call the official helpline," with the number from the built-in table or the lookup. |
 | Unknown | Generic signals only; high risk gives the same "hang up" instruction. |
+
+## 10. Built to grow
+
+The hackathon build is the first slice of the guardian agent in [VISION.md](VISION.md). Five
+choices keep it from needing a rewrite later:
+
+| Choice | Hackathon | Later |
+|---|---|---|
+| **Call source interface** | Replay of sample transcripts | Guardian Line (Vobiz WebSocket stream), 3-way call, companion listener plug into the same interface |
+| **Call session over WebSocket** | Dashboard receives transcript, risk and action events live | Same event stream for phones and guardian apps |
+| **Policy is code, the model only assesses** | A small rules table: signals + caller type → action | Same table, tested and auditable at scale |
+| **Actions are tools** | Code word, "Is this you?" check, lookup, email alert | Add callback, WhatsApp, scam report without touching the engine |
+| **Model cascade in the provider layer** | Ultra for scoring (Super as fallback) | Nano screens every turn, Ultra on escalation |
