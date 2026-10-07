@@ -64,11 +64,3 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; }
 a { color: var(--accent); }
 button, input, select, textarea { font-family: inherit; }
 
-.shell {
-  min-height: 100vh;
-  display: grid;
-  place-content: center;
-  justify-items: center;
-  gap: 1rem;
-  color: var(--muted);
-}

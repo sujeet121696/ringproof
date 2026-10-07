@@ -10,6 +10,7 @@ answers with a `profile` message, never including the code word. Nothing is stor
 """
 
 import asyncio
+import contextlib
 import logging
 import time
 from collections.abc import Awaitable, Callable
@@ -21,6 +22,9 @@ from app.policy import decide
 log = logging.getLogger("ringproof.session")
 
 Send = Callable[[dict], Awaitable[None]]
+
+# How long the end of a call waits for a profile it has asked the browser for.
+PROFILE_WAIT_S = 3.0
 
 
 class CallSession:
@@ -41,6 +45,7 @@ class CallSession:
         self.turns: list[Turn] = []
         self.profile: Profile | None = None
         self._asked_for: str | None = None
+        self._profile_arrived = asyncio.Event()
         self._task: asyncio.Task | None = None
         self._dirty = False
 
@@ -52,12 +57,23 @@ class CallSession:
 
     async def set_profile(self, profile: Profile) -> None:
         self.profile = profile
+        self._profile_arrived.set()
         self._request_assessment()
 
     async def finish(self) -> None:
-        """Wait for the last assessment so the final risk reflects the whole call."""
-        while self._task and not self._task.done():
-            await self._task
+        """Wait for the last assessment so the final risk reflects the whole call.
+
+        If a profile was requested but hasn't arrived (a short call can end before the first
+        check returns), wait briefly for it so the final check uses the family memory.
+        """
+        while True:
+            while self._task and not self._task.done():
+                await self._task
+            if self._asked_for and not self.profile:
+                with contextlib.suppress(TimeoutError):
+                    await asyncio.wait_for(self._profile_arrived.wait(), PROFILE_WAIT_S)
+            if not (self._task and not self._task.done()):
+                break
         await self.send({"type": "end"})
 
     def _request_assessment(self) -> None:

@@ -1,14 +1,17 @@
 import asyncio
 import contextlib
+import json
 
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from pydantic import BaseModel, ValidationError
 
 from app.brain import get_brain
-from app.calls import ReplaySource, list_samples, load_sample
+from app.calls import SAMPLES as CALLS, ReplaySource, list_samples, load_sample
 from app.config import settings
 from app.models import AssessRequest, Contact, Profile, RiskResult, Turn
 from app.session import CallSession
+
+SAMPLES = CALLS.parent
 
 app = FastAPI(title="Ringproof")
 
@@ -29,6 +32,13 @@ def sample(sample_id: str) -> dict:
     if not call:
         raise HTTPException(404, f"no sample {sample_id!r}")
     return call
+
+
+@app.get("/api/seed/family")
+def seed_family() -> dict:
+    """Demo family, fetched once by the browser to seed its local memory. The server keeps no
+    memory of its own; after seeding, the browser's copy is the only one that is used."""
+    return json.loads((SAMPLES / "family.json").read_text(encoding="utf-8"))
 
 
 @app.post("/api/assess")

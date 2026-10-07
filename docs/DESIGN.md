@@ -48,16 +48,25 @@
 
 ## 4. Brand
 
+**Decided 2026-10-07:** logo, favicon and app icons follow kharidwise's style and palette. All
+artwork is original (drawn in `assets/build/make_svgs.py`); nothing is copied from kharidwise or
+an icon set.
+
 | Asset | File | Use |
 |---|---|---|
-| Logo | `assets/logo.svg` | README, dashboard header, demo video |
-| Mark | `assets/logo-mark.svg` | Square spots: avatar, app icon |
-| Favicon | `assets/favicon.svg` | Browser tab: `<link rel="icon" href="/favicon.svg" type="image/svg+xml">` |
+| Logo | `assets/logo.svg` | README, demo video |
+| Mark | `assets/logo-mark.svg`, `web/public/logo-mark.svg` | Dashboard header, square spots |
+| Favicon | `web/public/favicon.ico` (16/32/48), `favicon.svg` | Browser tab |
+| App icons | `web/public/apple-touch-icon.png`, `icons/icon-192/512/maskable-512.png`, `manifest.webmanifest` | Home-screen install, same set as kharidwise |
 
-- **Concept:** a shield (protection) around a phone handset (the call).
-- **Logo colors (current):** indigo `#4F46E5` → sky `#0EA5E9` gradient. See open questions.
-- **Wordmark:** "Ring" + "proof" in the accent color, using the system sans-serif bold.
-- The handset glyph is Material Icons "call" (Apache-2.0).
+- **Mark:** a shield (protection) with a phone handset (the call), Deep Navy `#0A2540` → `#0077B6`
+  gradient, white handset, and a green AI Green `#00C853` check badge with rays: "this call is
+  checked", in the spirit of kharidwise's verified tick. The favicon drops the rays (noise at 16 px)
+  and uses a smaller badge so the handset stays readable.
+- **Wordmark:** "Ring" in navy + "proof" in AI Green, like "kharid" + "wise". In the logo file the
+  letters are outlines from Bricolage Grotesque ExtraBold, so it renders the same everywhere. In
+  the dashboard header it is live text (`Ring<b>proof</b>`), so it follows light/dark.
+- Rebuild: `assets/build/README.md`.
 
 ## 5. Dashboard palette and type
 
@@ -80,6 +89,16 @@
 - **Themes:** light, dark and system via `data-theme` on `<html>`; `web/public/theme-init.js` applies
   a saved choice before paint (same as kharidwise).
 
-## 6. Open questions
+## 6. Built call screen (Oct 7)
 
-- The logo still uses the indigo → sky gradient. Recolour it to navy → cyan to match the dashboard?
+- Header: logo mark + text wordmark ("Ring" + "proof" in `--accent-green`), so it follows the app's
+  light/dark choice; tabs Call / Family memory; Auto / Light / Dark.
+- Call view: sample picker, speed, Play. Transcript left (caller lines with a red edge and signal
+  tags when flagged). Right column top to bottom: Risk (3-segment meter, level word, rationale,
+  "checking…" while a check runs), What to do (the climax), Caller (claimed person + their memory,
+  code word masked, the out-of-character quote), Official check (1930 + source), Warning signs
+  (all six, lit with quotes). On phones the right column comes first.
+
+## 7. Open questions
+
+- None right now.

@@ -38,7 +38,7 @@ def test_high_organisation_hangs_up_with_helpline():
     )
     assert [a.kind for a in actions] == ["hang_up_helpline", "alert_guardian"]
     assert actions[0].helpline["number"] == "1930"
-    assert "CBI" in actions[0].message
+    assert "1930" in actions[0].message
 
 
 def test_high_unknown_caller_hangs_up():

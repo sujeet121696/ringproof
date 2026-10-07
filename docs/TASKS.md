@@ -45,6 +45,8 @@
 11. [ ] Transcriber module with speaker turns; save each sample's transcript to `samples/`
     (English; plus Hindi/Hinglish route if the go/no-go passed)
 12. [ ] Family memory in the browser (IndexedDB): profiles + household rules, CRUD + delete-all
+    - [x] Oct 7: IndexedDB store, seeded once from `/api/seed/family` (`web/src/memory.ts`)
+    - [ ] Edit, delete, delete-all (with step 22)
 13. [x] Port Resolve's `brain.ts` to Python: provider layer with `mock` + Nemotron modes
     (Ultra primary, Super fallback)
 14. [x] Risk engine: identify the claimed caller, load their profile, score against it
@@ -70,19 +72,24 @@
 17. [ ] Action layer: challenge by caller type (ARCHITECTURE §9): code word checked in the
     browser, "Is this you?" one-tap email check to the real contact, "hang up + helpline" for
     organisations
+    - [x] Oct 7: code word checked in the browser (`web/src/useCall.ts`): passes if the caller says
+      it; fails after 2 caller replies once the user has asked
+    - [ ] "Is this you?" email to the real contact (with step 18)
 18. [ ] Action layer: trusted-contact alert by email, ported from Resolve's `mailer.ts`
-19. [ ] Dashboard: input panel + live transcript
-20. [ ] Dashboard: risk meter + signals panel with triggering quotes
-21. [ ] Dashboard: caller card + actions panel + official-check panel
+19. [x] Dashboard: input panel + live transcript (Oct 7)
+20. [x] Dashboard: risk meter + signals panel with triggering quotes (Oct 7)
+21. [x] Dashboard: caller card + actions panel + official-check panel (Oct 7; official check
+    shows the built-in 1930 for now, Tavily details come with step 16)
 22. [ ] Dashboard: memory view with contact cards, delete, and delete-all
-23. [ ] Wire the favicon + logo into the dashboard
+23. [x] Wire the favicon + logo into the dashboard (mark + text wordmark, so it follows the theme)
 
 ## Week 4 · Oct 19 – 25 · Polish + resilience → M4
 24. [x] Replay cached transcripts at call speed so risk updates live (done early in 14a, Oct 7)
     (live audio streaming only if time allows)
 25. [ ] Fallback providers for reasoning and transcription, tested by forcing a failure
 26. [ ] UI polish: legible at a glance, intervention is the climax, memory is visible
-27. [ ] Lock the logo font (convert text to fixed shapes) and add PNG/ICO favicon fallbacks
+27. [x] Lock the logo font (convert text to fixed shapes) and add PNG/ICO favicon fallbacks
+    (Oct 7: redesigned in the kharidwise style; full icon set + manifest; `assets/build/`)
 28. [ ] Deploy to a public **demo URL** (required)
 29. [ ] If Hindi/Hinglish is in: record one Hinglish digital-arrest sample and add it to the demo
 30. [ ] Full dry run with every sample on the deployed URL, and fix what breaks

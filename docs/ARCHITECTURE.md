@@ -134,9 +134,9 @@ The challenge depends on who the caller claims to be:
 
 | Caller claims to be | Challenge |
 |---|---|
-| Family member **with** a code word | "Ask the caller our family code word." The browser checks the caller's answer in the transcript against the stored code word, which never leaves the browser. |
+| Family member **with** a code word | "Ask the caller our family code word." The browser checks the caller's answer in the transcript against the stored code word, which never leaves the browser. It passes if the caller says the word, and fails after two caller replies once the user has asked for it. |
 | Family member **without** a code word | **"Is this you?" check:** the *real* contact gets an email with a one-tap "Yes, it's me" / "No, it's not me" link. A "No" immediately tells the user to hang up. Replaces the earlier OTP idea: simpler for the contact, and it pulls the real family member in. |
-| An organisation (CBI, police, bank…) | No challenge, because the caller can't be verified mid-call. Instruction: "Hang up and call the official helpline," with the number from the built-in table or the lookup. |
+| An organisation (CBI, police, bank…) | No challenge, because the caller can't be verified mid-call. Instruction: "Hang up and call the official helpline," with the number from the built-in table or the lookup. The instruction doesn't name the organisation, because the claim can change mid-call (courier → customs → CBI); the caller card shows the current claim. |
 | Unknown | Generic signals only; high risk gives the same "hang up" instruction. |
 
 ## 10. Built to grow

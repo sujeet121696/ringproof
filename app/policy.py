@@ -57,14 +57,12 @@ def decide(
             message=f"We are checking with the real {family.name}. Do not send anything until they confirm.",
         ))
     else:
-        who = f"Callers from {result.claimed_org}" if result.claimed_org else "Genuine callers"
+        # No organisation name here: an action is sent once, and the caller's claim can change
+        # mid-call (courier -> customs -> CBI). The caller card shows the current claim.
         actions.append(Action(
             kind="hang_up_helpline",
             helpline=NATIONAL_HELPLINE,
-            message=(
-                f"This looks like a scam. {who} never ask for this on a call. "
-                f"Hang up now. If you are worried, call {NATIONAL_HELPLINE['number']}."
-            ),
+            message=f"This looks like a scam. Hang up now. If you are worried, call {NATIONAL_HELPLINE['number']}.",
         ))
 
     if alert_contact:
