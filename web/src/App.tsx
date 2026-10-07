@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { CallView } from './components/CallView'
-import { loadOrSeed } from './memory'
+import { InstallButton } from './components/InstallButton'
+import { MemoryView } from './components/MemoryView'
+import { loadOrSeed, saveMemory } from './memory'
 import type { FamilyMemory } from './types'
 import './App.css'
 
@@ -30,12 +32,19 @@ function applyTheme(t: Theme) {
 function App() {
   const [memory, setMemory] = useState<FamilyMemory | null>(null)
   const [failed, setFailed] = useState(false)
+  const [saveFailed, setSaveFailed] = useState(false)
   const [tab, setTab] = useState<'call' | 'memory'>('call')
   const [theme, setTheme] = useState<Theme>(readTheme)
 
   useEffect(() => {
     loadOrSeed().then(setMemory).catch(() => setFailed(true))
   }, [])
+
+  // Every edit is saved to this browser straight away.
+  function updateMemory(m: FamilyMemory) {
+    setMemory(m)
+    saveMemory(m).then(() => setSaveFailed(false), () => setSaveFailed(true))
+  }
 
   return (
     <>
@@ -49,6 +58,7 @@ function App() {
           <button className={tab === 'call' ? 'on' : ''} onClick={() => setTab('call')}>Call</button>
           <button className={tab === 'memory' ? 'on' : ''} onClick={() => setTab('memory')}>Family memory</button>
         </nav>
+        <InstallButton />
         <div className="theme" role="group" aria-label="Theme">
           {(['system', 'light', 'dark'] as const).map((t) => (
             <button key={t} className={theme === t ? 'on' : ''} aria-pressed={theme === t}
@@ -61,23 +71,10 @@ function App() {
 
       <main className="page">
         {failed && <p className="error">Could not reach the Ringproof backend. Is it running on port 8100?</p>}
+        {saveFailed && <p className="error">Could not save to this browser's storage. Changes will be lost on reload.</p>}
         {!memory && !failed && <p className="muted">Loading family memory…</p>}
         {memory && tab === 'call' && <CallView memory={memory} />}
-        {memory && tab === 'memory' && (
-          <section className="card">
-            <h2>Family memory</h2>
-            <p className="muted">
-              Stored only in this browser. Editing and delete-all are coming in the next step.
-            </p>
-            <ul className="contact-list">
-              {memory.contacts.map((c) => (
-                <li key={c.id}>
-                  <strong>{c.name}</strong> <span className="muted">· {c.relation} · calls you “{c.addresses_user_as}”</span>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
+        {memory && tab === 'memory' && <MemoryView memory={memory} onChange={updateMemory} />}
       </main>
     </>
   )

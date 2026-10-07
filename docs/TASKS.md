@@ -1,16 +1,27 @@
 # Tasks
 
-> Step-by-step build plan. Deadline: **Oct 30, 2026**. Target submit: **Oct 29** (1-day buffer).
+> Step-by-step build plan. Deadline: **Oct 30, 2026**. Target submit: **Oct 23** (1-week buffer,
+> decided Oct 8). Week headings below are the original plan; the dates that count are these.
 
 ## Milestones
 
 | # | Milestone | Target |
 |---|---|---|
-| M1 | Both models answer a test call on real infra | Oct 4 |
-| M2 | Sample audio → transcript → memory-aware risk score, end-to-end in code | Oct 11 |
-| M3 | Full demo flow in the dashboard: memory, intervention, data control | Oct 18 |
-| M4 | Polished, resilient, demo-ready | Oct 25 |
-| M5 | Submitted | Oct 29 |
+| M1 | Both models answer a test call on real infra | Oct 4 ✓ |
+| M2 | Sample audio → transcript → memory-aware risk score, end-to-end in code | Oct 12 |
+| M3 | Full demo flow in the dashboard: memory, intervention, data control | Oct 15 |
+| M4 | Polished, resilient, deployed, dry-run done | Oct 19 |
+| M5 | Submitted (README, feedback, video, Devpost) | Oct 23 |
+
+## Compressed plan (from Oct 8)
+
+| Dates | Build | Needs from Sujeet |
+|---|---|---|
+| Oct 8–10 | 22 + 12 memory screen, 15 turn-by-turn, 16 Tavily lookup, 18 + 17 emails | Pick an email sender (account + key in `.env`) |
+| Oct 10–12 | 6, 10, 11 Parakeet on a Nebius GPU + audio upload; 7 Hinglish go/no-go | Record the 9 sample calls (8); start a GPU |
+| Oct 13–15 | 25 fallback test, 26 UI polish | — |
+| Oct 16–19 | 28 deploy to `ringproof.kharidwise.com`, 30 dry run; 30a Vobiz only if ahead | Check VM price; Cloudflare DNS |
+| Oct 20–23 | 31 README, 32 feedback, 33 video, 34–35 submit | Voiceover for the video |
 
 ## Done
 - [x] Lock idea, name and track
@@ -44,9 +55,9 @@
 10. [ ] Audio ingest: upload a file and split it into chunks
 11. [ ] Transcriber module with speaker turns; save each sample's transcript to `samples/`
     (English; plus Hindi/Hinglish route if the go/no-go passed)
-12. [ ] Family memory in the browser (IndexedDB): profiles + household rules, CRUD + delete-all
+12. [x] Family memory in the browser (IndexedDB): profiles + household rules, CRUD + delete-all
     - [x] Oct 7: IndexedDB store, seeded once from `/api/seed/family` (`web/src/memory.ts`)
-    - [ ] Edit, delete, delete-all (with step 22)
+    - [x] Oct 8: edit, delete, delete-all (with step 22)
 13. [x] Port Resolve's `brain.ts` to Python: provider layer with `mock` + Nemotron modes
     (Ultra primary, Super fallback)
 14. [x] Risk engine: identify the claimed caller, load their profile, score against it
@@ -80,7 +91,8 @@
 20. [x] Dashboard: risk meter + signals panel with triggering quotes (Oct 7)
 21. [x] Dashboard: caller card + actions panel + official-check panel (Oct 7; official check
     shows the built-in 1930 for now, Tavily details come with step 16)
-22. [ ] Dashboard: memory view with contact cards, delete, and delete-all
+22. [x] Dashboard: memory view with contact cards, add/edit, delete, and delete-all (Oct 8;
+    `web/src/components/MemoryView.tsx`, checked in the browser incl. reload after delete-all)
 23. [x] Wire the favicon + logo into the dashboard (mark + text wordmark, so it follows the theme)
 
 ## Week 4 · Oct 19 – 25 · Polish + resilience → M4
@@ -88,6 +100,10 @@
     (live audio streaming only if time allows)
 25. [ ] Fallback providers for reasoning and transcription, tested by forcing a failure
 26. [ ] UI polish: legible at a glance, intervention is the climax, memory is visible
+26a. [x] Installable on phones (PWA), Oct 8: manifest + `sw.js` (production builds only) + Install
+    button (Android/desktop Chrome prompt; iPhone shows "Share → Add to Home Screen"). Checked on
+    `localhost` in Chrome: worker active, app files cached, Install button shown. Needs HTTPS, so the
+    real phone test comes after the deploy (28)
 27. [x] Lock the logo font (convert text to fixed shapes) and add PNG/ICO favicon fallbacks
     (Oct 7: redesigned in the kharidwise style; full icon set + manifest; `assets/build/`)
 28. [ ] Deploy to a public **demo URL** (required)
@@ -106,5 +122,5 @@
     demo story: digital-arrest call caught, fake Sujeet fails the code word, real Sujeet's call stays quiet
 34. [ ] Devpost submission: track, repo link, demo URL, video, description, feedback;
     mention Tavily usage (select Best Use of Tavily if the form asks)
-35. [ ] Final check against the hackathon rules, then submit before **Oct 30, 10:00 AM PDT
-    (10:30 PM IST)**
+35. [ ] Final check against the hackathon rules, then submit by **Oct 23**
+    (hard deadline Oct 30, 10:00 AM PDT = 10:30 PM IST)

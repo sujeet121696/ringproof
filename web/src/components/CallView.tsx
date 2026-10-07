@@ -55,12 +55,12 @@ export function CallView(props: { memory: FamilyMemory }) {
           <h2>Pick a sample call and press Play</h2>
           <p className="muted">
             Ringproof listens as the call plays, checks it against what it remembers about the
-            family, and tells {props.memory.user.called} exactly what to do if something is wrong.
+            family, and tells {props.memory.user.called || 'you'} exactly what to do if something is wrong.
           </p>
         </section>
       ) : (
         <div className="call-grid">
-          <Transcript turns={state.turns} signals={state.signals} userName={props.memory.user.called} />
+          <Transcript turns={state.turns} signals={state.signals} userName={props.memory.user.called || 'You'} />
           <div className="side">
             <RiskMeter risk={state.risk} checking={state.checking} live={live} />
             <ActionPanel actions={state.actions} challenge={state.challenge} memory={props.memory} />
