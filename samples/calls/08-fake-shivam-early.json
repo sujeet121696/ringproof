@@ -1,0 +1,18 @@
+{
+  "id": "fake-shivam-early",
+  "title": "\"Shivam\" in trouble, cut off before any money ask",
+  "language": "en",
+  "_tests": "The greeting matches Shivam (Mummy), so out_of_character must come from behaviour (secrecy, which his profile says he never asks for), not words alone. No ask yet, so medium, not high. Urgency is borderline here and not required.",
+  "expected": {
+    "score": "medium",
+    "signals": ["secrecy", "out_of_character"],
+    "claimed_contact": "shivam",
+    "claimed_org": null,
+    "action": "watch"
+  },
+  "turns": [
+    { "t": 0,  "speaker": "caller", "text": "Mummy, it's Shivam. I'm in big trouble, please listen carefully." },
+    { "t": 6,  "speaker": "user",   "text": "Shivam? What happened, beta?" },
+    { "t": 9,  "speaker": "caller", "text": "I can't explain everything now. Just promise you won't tell Sujeet bhaiya, okay? Promise me right now." }
+  ]
+}

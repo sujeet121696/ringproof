@@ -1,0 +1,20 @@
+{
+  "id": "real-sahni",
+  "title": "Sahni invites Maa to a family function",
+  "language": "en",
+  "_tests": "A less frequent contact (Suvaani's sister) with an ordinary call: low, and correctly identified.",
+  "expected": {
+    "score": "low",
+    "signals": [],
+    "claimed_contact": "sahni",
+    "claimed_org": null,
+    "action": "none"
+  },
+  "turns": [
+    { "t": 0,  "speaker": "caller", "text": "Namaste Aunty ji, Sahni here, Suvaani's sister." },
+    { "t": 5,  "speaker": "user",   "text": "Arre Sahni, how are you beta?" },
+    { "t": 8,  "speaker": "caller", "text": "All good! My cousin's sangeet is on the twentieth. You must come, Suvaani and Sujeet ji are coming too." },
+    { "t": 16, "speaker": "user",   "text": "Of course, I'll come." },
+    { "t": 18, "speaker": "caller", "text": "Wonderful, I'll send the card on WhatsApp. Take care, Aunty ji." }
+  ]
+}

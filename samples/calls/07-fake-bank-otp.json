@@ -1,0 +1,20 @@
+{
+  "id": "fake-bank-otp",
+  "title": "Fake bank asks for an OTP to \"unblock\" the account",
+  "language": "en",
+  "_tests": "Breaks household rule 0 (the bank never asks for an OTP on a call). Same bank name as the genuine call 04.",
+  "expected": {
+    "score": "high",
+    "signals": ["impersonation", "urgency", "transfer_ask"],
+    "claimed_contact": null,
+    "claimed_org": "Gomti Bank",
+    "action": "hang_up_helpline",
+    "rules_broken": [0]
+  },
+  "turns": [
+    { "t": 0,  "speaker": "caller", "text": "Hello, this is the security department of Gomti Bank. Your debit card has been blocked due to suspicious activity." },
+    { "t": 8,  "speaker": "user",   "text": "Blocked? I just got a new card." },
+    { "t": 11, "speaker": "caller", "text": "Yes madam, someone is trying to withdraw money from it right now. To stop it, I am sending an OTP to your phone." },
+    { "t": 19, "speaker": "caller", "text": "Please read the OTP to me quickly, otherwise all your savings will be lost in ten minutes." }
+  ]
+}

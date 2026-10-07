@@ -1,0 +1,61 @@
+{
+  "_note": "Demo family memory. Real first names (used with consent); every other detail, including the code word, is made up for the demo. In the app this lives only in the browser (IndexedDB); this file seeds the demo.",
+  "user": {
+    "name": "Mrs. Singh",
+    "called": "Maa"
+  },
+  "contacts": [
+    {
+      "id": "sujeet",
+      "name": "Sujeet",
+      "relation": "son",
+      "addresses_user_as": "Maa",
+      "usual_topics": ["her health", "doctor visits", "weekend plans", "family dinners"],
+      "never": ["asks for money in a hurry", "asks her to keep secrets from the family"],
+      "past_requests": [
+        { "date": "2026-03", "what": "Asked for ₹2,000 for a train ticket, repaid the same week" }
+      ],
+      "code_word": "gulmohar",
+      "email": "sujeet@example.com"
+    },
+    {
+      "id": "suvaani",
+      "name": "Suvaani",
+      "relation": "daughter-in-law (Sujeet's wife)",
+      "addresses_user_as": "Mummy ji",
+      "usual_topics": ["recipes", "festivals", "her health", "shopping"],
+      "never": ["asks for money"],
+      "past_requests": [],
+      "code_word": null,
+      "email": "suvaani@example.com"
+    },
+    {
+      "id": "shivam",
+      "name": "Shivam",
+      "relation": "son (Sujeet's younger brother)",
+      "addresses_user_as": "Mummy",
+      "usual_topics": ["his job", "cricket", "coming home for holidays"],
+      "never": ["asks for money without telling Sujeet", "asks her to keep secrets"],
+      "past_requests": [],
+      "code_word": null,
+      "email": "shivam@example.com"
+    },
+    {
+      "id": "sahni",
+      "name": "Sahni",
+      "relation": "Suvaani's sister",
+      "addresses_user_as": "Aunty ji",
+      "usual_topics": ["family functions", "festival wishes", "invitations"],
+      "never": ["asks for money"],
+      "past_requests": [],
+      "code_word": null,
+      "email": "sahni@example.com"
+    }
+  ],
+  "household_rules": [
+    "My bank never asks for an OTP, PIN or password on a call.",
+    "Police and the CBI never arrest anyone over a phone or video call.",
+    "No government agency asks for money to be moved to a 'verification' or 'safe' account."
+  ],
+  "alert_contact": "sujeet"
+}

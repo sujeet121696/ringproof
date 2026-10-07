@@ -1,0 +1,168 @@
+/* Dashboard layout and components. Tokens live in index.css (kharidwise palette, DESIGN.md §5). */
+
+.site-head {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+  padding: 12px 24px;
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--fg); }
+.brand img { display: block; }
+.brand .word { font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; letter-spacing: -0.02em; }
+.brand b { color: var(--accent-green); font-weight: 800; }
+
+.tabs, .theme { display: flex; gap: 4px; }
+.tabs { flex: 1; }
+.tabs button, .theme button {
+  border: 1px solid transparent;
+  background: none;
+  color: var(--muted);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.tabs button.on { background: var(--fg); color: var(--bg); }
+.theme button { font-size: 0.85rem; padding: 4px 10px; }
+.theme button.on { border-color: var(--line); color: var(--fg); }
+
+.page { max-width: 1240px; margin: 0 auto; padding: 20px 16px 48px; }
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px 18px;
+}
+.card h2 { margin: 0 0 10px; font-size: 1rem; letter-spacing: 0.01em; }
+.muted { color: var(--muted); }
+.error { color: var(--risk-high); font-weight: 600; }
+
+/* Controls */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.controls label { display: grid; gap: 4px; font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+.controls select {
+  min-width: 0;
+  max-width: 100%;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--card-bg);
+  color: var(--fg);
+  font-size: 0.95rem;
+}
+.controls button {
+  padding: 9px 20px;
+  border-radius: 999px;
+  border: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+.controls button.go { background: var(--fg); color: var(--bg); }
+.controls button.stop { background: var(--risk-high); color: #fff; }
+.controls button:disabled { opacity: 0.5; cursor: default; }
+.controls .ended { align-self: center; }
+
+.empty { text-align: center; padding: 48px 24px; }
+.empty h2 { font-size: 1.4rem; }
+.empty p { max-width: 36rem; margin: 0 auto; }
+
+/* Call grid: transcript left, everything about the decision right */
+.call-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+.side { display: grid; gap: 16px; }
+@media (max-width: 860px) {
+  .call-grid { grid-template-columns: 1fr; }
+  .side { order: -1; }
+}
+
+/* Transcript */
+.transcript { max-height: calc(100vh - 200px); overflow-y: auto; }
+.lines { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.line { padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); animation: appear 0.3s ease-out; }
+.line.caller { background: var(--bg); }
+.line.user { background: var(--note-bg); margin-left: 12%; }
+.line.flagged { border-color: var(--risk-high); box-shadow: inset 4px 0 0 var(--risk-high); }
+.line p { margin: 4px 0 0; line-height: 1.45; }
+.who { font-size: 0.8rem; font-weight: 700; color: var(--muted); display: flex; gap: 8px; }
+.time { font-weight: 400; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--risk-high-bg);
+  color: var(--risk-high);
+}
+@keyframes appear { from { opacity: 0; transform: translateY(4px); } }
+
+/* Risk meter */
+.risk-head { display: flex; justify-content: space-between; align-items: baseline; }
+.checking { font-size: 0.8rem; color: var(--muted); animation: pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: 0.35; } }
+.meter { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.seg { height: 12px; border-radius: 6px; background: var(--line); transition: background 0.3s; }
+.seg.low.on { background: var(--risk-low); }
+.seg.medium.on { background: var(--risk-medium); }
+.seg.high.on { background: var(--risk-high); }
+.risk.medium .seg.low, .risk.high .seg.low { background: var(--risk-low); opacity: 0.35; }
+.risk.high .seg.medium { background: var(--risk-medium); opacity: 0.35; }
+.level { font-family: var(--font-display); font-weight: 800; font-size: 1.8rem; margin: 10px 0 4px; }
+.risk.high .level { color: var(--risk-high); }
+.why { margin: 0; color: var(--muted); line-height: 1.45; }
+
+/* Action: the climax */
+.action.idle { border-style: dashed; }
+.action.medium { border-color: var(--risk-medium); }
+.action.high { border: 2px solid var(--risk-high); background: var(--risk-high-bg); }
+.action.low { border: 2px solid var(--risk-low); }
+.headline { font-family: var(--font-display); font-weight: 800; font-size: 1.35rem; line-height: 1.3; margin: 0; }
+.action.high .headline { font-size: 1.5rem; }
+.detail { color: var(--muted); margin: 8px 0 0; }
+.alert-line { margin: 12px 0 0; font-weight: 600; }
+
+/* Caller + memory */
+.who-claim { margin: 0 0 10px; font-size: 1.05rem; }
+.memory { background: var(--note-bg); border-left: 4px solid var(--accent-lavender); border-radius: 10px; padding: 10px 12px; }
+.memory-label { margin: 0 0 6px; font-size: 0.8rem; font-weight: 700; color: var(--muted); }
+.memory ul { margin: 0; padding-left: 18px; line-height: 1.6; }
+.mismatch { margin: 10px 0 0; font-weight: 600; color: var(--risk-high); }
+
+/* Official check */
+.official .number { font-family: var(--font-display); font-weight: 800; font-size: 2.2rem; margin: 0; }
+.official p { margin: 0 0 6px; }
+
+/* Signals */
+.signals ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.signals li { display: flex; gap: 10px; align-items: start; color: var(--muted); }
+.signals li.lit { color: var(--fg); }
+.signals .mark {
+  flex: none;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  font-weight: 800;
+  background: var(--line);
+}
+.signals li.lit .mark { background: var(--risk-high); color: #fff; }
+.signals q { display: block; font-size: 0.9rem; color: var(--muted); margin-top: 2px; }
+
+.contact-list { line-height: 1.9; padding-left: 18px; }

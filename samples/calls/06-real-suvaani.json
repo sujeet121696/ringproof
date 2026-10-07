@@ -1,0 +1,20 @@
+{
+  "id": "real-suvaani",
+  "title": "Daughter-in-law asks about a Diwali recipe",
+  "language": "en",
+  "_tests": "An ordinary call from a contact with no code word stays quiet.",
+  "expected": {
+    "score": "low",
+    "signals": [],
+    "claimed_contact": "suvaani",
+    "claimed_org": null,
+    "action": "none"
+  },
+  "turns": [
+    { "t": 0,  "speaker": "caller", "text": "Namaste Mummy ji, it's Suvaani. Are you busy?" },
+    { "t": 4,  "speaker": "user",   "text": "No beta, tell me." },
+    { "t": 6,  "speaker": "caller", "text": "I'm making besan ladoo for Diwali. How much ghee do you put for one kilo of besan?" },
+    { "t": 13, "speaker": "user",   "text": "About half a kilo, and roast it slowly on low flame." },
+    { "t": 18, "speaker": "caller", "text": "Thank you Mummy ji! Sujeet says we'll come on Saturday, I'll bring some for you." }
+  ]
+}

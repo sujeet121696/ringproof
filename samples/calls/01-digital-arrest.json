@@ -1,0 +1,26 @@
+{
+  "id": "digital-arrest",
+  "title": "\"CBI officer\" digital-arrest scam",
+  "language": "en",
+  "expected": {
+    "score": "high",
+    "signals": ["impersonation", "isolation", "secrecy", "urgency", "transfer_ask"],
+    "claimed_contact": null,
+    "claimed_org": "CBI",
+    "action": "hang_up_helpline",
+    "rules_broken": [1, 2]
+  },
+  "turns": [
+    { "t": 0,  "speaker": "caller", "text": "Hello, am I speaking with Mrs. Singh?" },
+    { "t": 4,  "speaker": "user",   "text": "Yes, who is this?" },
+    { "t": 6,  "speaker": "caller", "text": "Madam, I am calling from the courier company. A parcel booked in your name to Cambodia has been stopped at Mumbai customs. It has five passports and two hundred grams of drugs." },
+    { "t": 17, "speaker": "user",   "text": "What? I have not sent any parcel." },
+    { "t": 20, "speaker": "caller", "text": "Then your Aadhaar is being misused. I am connecting you to the officer now. Please hold." },
+    { "t": 27, "speaker": "caller", "text": "This is Inspector Sharma, CBI. Madam, your name is in a money-laundering case. From this moment you are under digital arrest." },
+    { "t": 37, "speaker": "user",   "text": "Arrest? But I am at home..." },
+    { "t": 40, "speaker": "caller", "text": "Do not disconnect this call and do not tell anyone, not even your son. If you tell anyone, the police will come to your house today." },
+    { "t": 49, "speaker": "caller", "text": "To prove your innocence you must transfer two lakh rupees to the RBI verification account. It will be returned after the inquiry. Do it in the next thirty minutes." },
+    { "t": 60, "speaker": "user",   "text": "I need to ask my son first." },
+    { "t": 63, "speaker": "caller", "text": "No! I said this is confidential. Stay on the line and open your UPI app now." }
+  ]
+}
