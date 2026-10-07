@@ -111,7 +111,7 @@ Non-Nebius hosts (self-hosted ASR weights) are for development only, never for t
 - **Where it lives:** only in the browser (IndexedDB) on the user's device. The user can view,
   edit and delete profiles, and delete everything. The backend never stores memory.
 - **Identifying the caller:** the browser sends the transcript plus contact names and relations
-  only. The model returns `claimed_contact` ("Rahul") or `claimed_org` ("CBI"). The browser then
+  only. The model returns `claimed_contact` ("Sujeet") or `claimed_org` ("CBI"). The browser then
   attaches that one profile (without the code word) to later requests. Unknown callers are
   scored on generic signals and household rules.
 - **Retention:** call audio and transcripts are discarded when the call ends.
@@ -150,4 +150,24 @@ choices keep it from needing a rewrite later:
 | **Call session over WebSocket** | Dashboard receives transcript, risk and action events live | Same event stream for phones and guardian apps |
 | **Policy is code, the model only assesses** | A small rules table: signals + caller type → action | Same table, tested and auditable at scale |
 | **Actions are tools** | Code word, "Is this you?" check, lookup, email alert | Add callback, WhatsApp, scam report without touching the engine |
-| **Model cascade in the provider layer** | Ultra for scoring (Super as fallback) | Nano screens every turn, Ultra on escalation |
+| **Model choice in the provider layer** | Ultra for scoring (Super as fallback) | Swap or add models without touching the engine. Oct 7 benchmark: Ultra 8/8 at 2.2 s median beat Super (4.1 s), Nano (7/8, 4.8 s) and Lightning (0/8) |
+
+## 11. Live call protocol (`/ws/call`)
+
+One WebSocket per call. JSON messages. Code: `app/main.py`, `app/session.py`, `app/calls/`.
+Reference client: `scripts/ws_replay.py`.
+
+| Direction | `type` | Fields | When |
+|---|---|---|---|
+| browser → server | `start` | `sample_id`, `speed`, `contacts[]` (id, name, relation), `household_rules[]`, `alert_contact` | First message |
+| server → browser | `started` | `sample`, `duration` | Call begins |
+| server → browser | `turn` | `index`, `turn` (`t`, `speaker`, `text`) | Each transcript line, at call speed |
+| server → browser | `risk` | `upto`, `ms`, `with_profile`, `result` (RiskResult) | After caller turns; runs in the background |
+| server → browser | `need_profile` | `contact` | The model named a family contact |
+| browser → server | `profile` | `profile` with `has_code_word` (true/false; never the word itself; unknown fields are dropped) | Reply to `need_profile` |
+| server → browser | `action` | `upto`, `action` (`kind`, `message`, `target`, `helpline`) | The policy (`app/policy.py`) picks a new action; each kind is sent once per call |
+| server → browser | `error` | `message` | A risk check failed; the call keeps going |
+| server → browser | `end` | | After the last risk check; nothing is kept |
+
+If caller turns arrive while a check is running, they are folded into one follow-up check of
+the latest transcript, so the risk never falls behind by more than one check.

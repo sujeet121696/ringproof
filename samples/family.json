@@ -1,35 +1,55 @@
 {
-  "_note": "Demo family memory (fictional). In the app this lives only in the browser (IndexedDB); this file seeds the demo.",
+  "_note": "Demo family memory. Real first names (used with consent); every other detail, including the code word, is made up for the demo. In the app this lives only in the browser (IndexedDB); this file seeds the demo.",
   "user": {
-    "name": "Kamala Verma",
-    "called": "Maa",
-    "age": 68,
-    "city": "Lucknow"
+    "name": "Mrs. Singh",
+    "called": "Maa"
   },
   "contacts": [
     {
-      "id": "rahul",
-      "name": "Rahul",
+      "id": "sujeet",
+      "name": "Sujeet",
       "relation": "son",
       "addresses_user_as": "Maa",
-      "usual_topics": ["dinner plans", "rides to the doctor", "weekend visits", "her health"],
-      "never": ["asks for money over the phone", "asks her to keep secrets from Papa"],
+      "usual_topics": ["her health", "doctor visits", "weekend plans", "family dinners"],
+      "never": ["asks for money in a hurry", "asks her to keep secrets from the family"],
       "past_requests": [
         { "date": "2026-03", "what": "Asked for ₹2,000 for a train ticket, repaid the same week" }
       ],
       "code_word": "gulmohar",
-      "email": "rahul@example.com"
+      "email": "sujeet@example.com"
     },
     {
-      "id": "anjali",
-      "name": "Anjali",
-      "relation": "daughter",
-      "addresses_user_as": "Mummy",
-      "usual_topics": ["Sunday video calls", "grandchildren", "recipes"],
+      "id": "suvaani",
+      "name": "Suvaani",
+      "relation": "daughter-in-law (Sujeet's wife)",
+      "addresses_user_as": "Mummy ji",
+      "usual_topics": ["recipes", "festivals", "her health", "shopping"],
       "never": ["asks for money"],
       "past_requests": [],
       "code_word": null,
-      "email": "anjali@example.com"
+      "email": "suvaani@example.com"
+    },
+    {
+      "id": "shivam",
+      "name": "Shivam",
+      "relation": "son (Sujeet's younger brother)",
+      "addresses_user_as": "Mummy",
+      "usual_topics": ["his job", "cricket", "coming home for holidays"],
+      "never": ["asks for money without telling Sujeet", "asks her to keep secrets"],
+      "past_requests": [],
+      "code_word": null,
+      "email": "shivam@example.com"
+    },
+    {
+      "id": "sahni",
+      "name": "Sahni",
+      "relation": "Suvaani's sister",
+      "addresses_user_as": "Aunty ji",
+      "usual_topics": ["family functions", "festival wishes", "invitations"],
+      "never": ["asks for money"],
+      "past_requests": [],
+      "code_word": null,
+      "email": "sahni@example.com"
     }
   ],
   "household_rules": [
@@ -37,5 +57,5 @@
     "Police and the CBI never arrest anyone over a phone or video call.",
     "No government agency asks for money to be moved to a 'verification' or 'safe' account."
   ],
-  "alert_contact": "rahul"
+  "alert_contact": "sujeet"
 }

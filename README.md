@@ -35,6 +35,49 @@ Call audio ──▶ Parakeet/Canary ──▶ transcript
 
 Demo scope: sample calls through a dashboard, not live telephony interception (a post-hackathon concern).
 
+## Run locally
+
+Needs Python 3.12 and Node 20+. Windows commands shown; on macOS/Linux use `.venv/bin/` and `cp`.
+
+**One-time setup**
+
+```bash
+py -3.12 -m venv .venv
+.venv\Scripts\python -m pip install -r requirements.txt
+cd web && npm install && cd ..
+copy .env.example .env      # then fill in NEBIUS_API_KEY and TAVILY_API_KEY
+```
+
+No keys yet? Set `PROVIDER=mock` in `.env` to run with deterministic rules and no API calls.
+
+**Run** (two terminals)
+
+```bash
+# 1. Backend: http://localhost:8100 (API docs at /docs)
+.venv\Scripts\python -m uvicorn app.main:app --port 8100 --reload
+
+# 2. Dashboard: http://localhost:5180 (proxies /api to the backend)
+cd web && npm run dev
+```
+
+**Check the risk engine against the sample calls**
+
+```bash
+.venv\Scripts\python -m scripts.eval_samples
+```
+
+**Run the unit tests**
+
+```bash
+.venv\Scripts\python -m pytest tests
+```
+
+**Watch a call replay live in the terminal** (backend running)
+
+```bash
+.venv\Scripts\python -m scripts.ws_replay digital-arrest --speed 2
+```
+
 ## Docs
 
 | File | Contents |

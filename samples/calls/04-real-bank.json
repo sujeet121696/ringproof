@@ -10,7 +10,7 @@
     "action": "none"
   },
   "turns": [
-    { "t": 0,  "speaker": "caller", "text": "Good afternoon, this is Neha from Gomti Bank, Hazratganj branch. Am I speaking with Mrs. Kamala Verma?" },
+    { "t": 0,  "speaker": "caller", "text": "Good afternoon, this is Neha from Gomti Bank. Am I speaking with Mrs. Singh?" },
     { "t": 7,  "speaker": "user",   "text": "Yes, speaking." },
     { "t": 9,  "speaker": "caller", "text": "Ma'am, your new debit card is ready. You can collect it from the branch any weekday between ten and four." },
     { "t": 17, "speaker": "caller", "text": "Please bring one photo ID. And please remember, the bank will never ask for your PIN or OTP on a call." },

@@ -29,11 +29,11 @@ Maa (68) gets a call: "This is Inspector Sharma, CBI. A parcel in your name had 
 under digital arrest. Do not disconnect, do not tell your son. Transfer ₹2,00,000 to this RBI
 verification account." Ringproof flags an impersonated authority, secrecy, urgency and a transfer
 ask, and knows from memory that *"real police never arrest anyone over a call"*. It tells Maa:
-"This is a known scam. Hang up. Official cyber-crime helpline: 1930." It alerts Rahul. Later, the
-real Rahul calls about dinner and Ringproof stays quiet.
+"This is a known scam. Hang up. Official cyber-crime helpline: 1930." It alerts Sujeet. Later, the
+real Sujeet calls about dinner and Ringproof stays quiet.
 
-A second call: "Mummy, it's me, I've had an accident, send ₹50,000 now, don't tell Papa." The
-voice sounds like Rahul, but he always calls her "Maa" and never asks for money over the phone.
+A second call: "Mummy, it's me, I've had an accident, send ₹50,000 now, don't tell Shivam." The
+voice sounds like Sujeet, but he always calls her "Maa" and never asks for money over the phone.
 Ringproof prompts: "Ask him our family code word." The caller can't answer, and Ringproof flags
 the call.
 
@@ -63,7 +63,7 @@ the call.
 
 | Field | Example |
 |---|---|
-| Name + relation | Rahul, son |
+| Name + relation | Sujeet, son |
 | How they address you | "Maa" |
 | Usual topics and asks | Dinner plans, rides; never money over the phone |
 | Past requests | Asked for ₹2,000 for a train ticket in March |
@@ -74,7 +74,7 @@ the call.
 
 - "My bank never asks for an OTP on a call."
 - "Police and the CBI never arrest anyone over a call."
-- Trusted contact to alert: Rahul.
+- Trusted contact to alert: Sujeet.
 
 Example scoring: your son asking for ₹50,000 in gift cards → **high**. Your "bank" asking for an
 OTP → **high**. Your son asking about dinner → **low**.

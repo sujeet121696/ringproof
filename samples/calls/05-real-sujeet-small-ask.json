@@ -1,0 +1,20 @@
+{
+  "id": "real-sujeet-small-ask",
+  "title": "Real son asks for a small, usual amount (no pressure)",
+  "language": "en",
+  "_tests": "A money ask alone must not trigger an alarm when it matches the person's history and has no pressure or secrecy.",
+  "expected": {
+    "score": ["low", "medium"],
+    "signals": [],
+    "claimed_contact": "sujeet",
+    "claimed_org": null,
+    "action": "none"
+  },
+  "turns": [
+    { "t": 0,  "speaker": "caller", "text": "Hi Maa, it's Sujeet. Did you eat?" },
+    { "t": 4,  "speaker": "user",   "text": "Yes beta, just now. Tell me." },
+    { "t": 7,  "speaker": "caller", "text": "Like last time, can you send two thousand for my train ticket to Lucknow? My card isn't working on the app." },
+    { "t": 15, "speaker": "caller", "text": "No hurry, tonight is fine. I'll give it back on Sunday when I come, and I'll tell Suvaani you helped." },
+    { "t": 23, "speaker": "user",   "text": "Okay, I'll send it after dinner." }
+  ]
+}

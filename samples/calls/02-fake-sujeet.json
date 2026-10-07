@@ -1,25 +1,25 @@
 {
-  "id": "fake-rahul",
+  "id": "fake-sujeet",
   "title": "Fake son in an \"accident\" (impersonated family member)",
   "language": "en",
   "expected": {
     "score": "high",
     "signals": ["impersonation", "urgency", "secrecy", "transfer_ask", "out_of_character"],
-    "claimed_contact": "rahul",
+    "claimed_contact": "sujeet",
     "claimed_org": null,
     "action": "code_word_challenge",
     "challenge_result": "failed",
     "out_of_character": [
-      "calls her 'Mummy'; Rahul says 'Maa'",
-      "asks for money over the phone",
-      "asks her to hide it from Papa"
+      "calls her 'Mummy'; Sujeet says 'Maa'",
+      "asks for money in a hurry",
+      "asks her to hide it from Shivam"
     ]
   },
   "turns": [
-    { "t": 0,  "speaker": "caller", "text": "Mummy, it's me, Rahul. Mummy, I've had an accident." },
-    { "t": 5,  "speaker": "user",   "text": "Rahul? Are you hurt? Where are you?" },
+    { "t": 0,  "speaker": "caller", "text": "Mummy, it's me, Sujeet. Mummy, I've had an accident." },
+    { "t": 5,  "speaker": "user",   "text": "Sujeet? Are you hurt? Where are you?" },
     { "t": 8,  "speaker": "caller", "text": "I'm okay but the other man is in hospital. The police say I have to pay fifty thousand now or they will file a case." },
-    { "t": 17, "speaker": "caller", "text": "Please send it to my friend's UPI, I'll give you the number. And don't tell Papa, he will get angry." },
+    { "t": 17, "speaker": "caller", "text": "Please send it to my friend's UPI, I'll give you the number. And don't tell Shivam or Suvaani, they will panic." },
     { "t": 26, "speaker": "user",   "text": "Beta, tell me our family code word first." },
     { "t": 30, "speaker": "caller", "text": "Mummy, there's no time for that! My phone is about to die." },
     { "t": 35, "speaker": "user",   "text": "Just tell me the word." },

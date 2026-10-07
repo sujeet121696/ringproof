@@ -37,22 +37,32 @@
     fake-family-member scam, real family call, real bank call
     - [x] Scripts written as timed transcripts with expected results (`samples/calls/`, Oct 6)
     - [ ] Record audio
-9. [x] Write the demo family: Maa + Rahul + Anjali profiles + household rules (`samples/family.json`)
+9. [x] Write the demo family: Maa + Sujeet, Suvaani, Shivam, Sahni profiles + household rules
+    (`samples/family.json`; real first names with consent, all other details made up)
 
 ## Week 2 · Oct 5 – 11 · Core pipeline → M2
 10. [ ] Audio ingest: upload a file and split it into chunks
 11. [ ] Transcriber module with speaker turns; save each sample's transcript to `samples/`
     (English; plus Hindi/Hinglish route if the go/no-go passed)
 12. [ ] Family memory in the browser (IndexedDB): profiles + household rules, CRUD + delete-all
-13. [ ] Port Resolve's `brain.ts` to Python: provider layer with `mock` + Nemotron modes
+13. [x] Port Resolve's `brain.ts` to Python: provider layer with `mock` + Nemotron modes
     (Ultra primary, Super fallback)
-14. [ ] Risk engine: identify the claimed caller, load their profile, score against it
-    (structured output `{ score, signals[], rationale, claimed_contact, claimed_org }`)
-14a. [ ] Call source interface (replay first) + call session over WebSocket that streams
-    transcript, risk and action events (ARCHITECTURE §10)
-14b. [ ] Policy table in code: signals + caller type → action (the model never picks the action)
+14. [x] Risk engine: identify the claimed caller, load their profile, score against it
+    (structured output `{ score, signals[], rationale, claimed_contact, claimed_org }`;
+    each signal carries the caller's triggering quote). `app/risk.py`, `app/brain/`
+14a. [x] Call source interface (replay first) + call session over WebSocket that streams
+    transcript, risk and action events (ARCHITECTURE §10, §11). Oct 7: real-speed replay on
+    Nemotron, risk 2–5 s behind each turn; fake Sujeet HIGH at 11 s, digital arrest HIGH at 24 s
+14b. [x] Policy table in code: signals + caller type → action (the model never picks the action).
+    `app/policy.py` + 10 tests (`pytest tests`); 9/9 samples pick the expected action on Nemotron.
+    Note: `alert_guardian` is announced but not delivered until step 18 (email)
 15. [ ] Run all samples through and tune the prompt until scam and real separate cleanly,
-    with and without a matching profile
+    with and without a matching profile (`python -m scripts.eval_samples`)
+    - [x] Oct 7: Nemotron 3 Ultra 4/4 on the first prompt, 2–6 s per call (mock: right scores)
+    - [x] Oct 7: harder cases added (samples 05–09: small usual ask, Suvaani, Sahni, fake-bank OTP,
+      fake Shivam cut off before any ask). 9/9 on two full runs after two prompt/brain fixes
+      (JSON mode + 4000 tokens; `claimed_org` only when the caller speaks for an organisation)
+    - [ ] Turn-by-turn: score rises at the right moment as the call replays
 
 ## Week 3 · Oct 12 – 18 · Agent + dashboard → M3
 16. [ ] Lookup module: Tavily search with the official-domain allowlist + built-in verified numbers
@@ -68,7 +78,7 @@
 23. [ ] Wire the favicon + logo into the dashboard
 
 ## Week 4 · Oct 19 – 25 · Polish + resilience → M4
-24. [ ] Replay cached transcripts at call speed so risk updates live
+24. [x] Replay cached transcripts at call speed so risk updates live (done early in 14a, Oct 7)
     (live audio streaming only if time allows)
 25. [ ] Fallback providers for reasoning and transcription, tested by forcing a failure
 26. [ ] UI polish: legible at a glance, intervention is the climax, memory is visible
@@ -86,7 +96,7 @@
 32. [ ] Write the required feedback on Nebius + NVIDIA tools 
     (specific and honest; $100 feedback prizes)
 33. [ ] Record the demo video (**≤3 min**, with voiceover on Nebius + NVIDIA usage) following the PRD
-    demo story: digital-arrest call caught, fake Rahul fails the code word, real Rahul passes
+    demo story: digital-arrest call caught, fake Sujeet fails the code word, real Sujeet's call stays quiet
 34. [ ] Devpost submission: track, repo link, demo URL, video, description, feedback;
     mention Tavily usage (select Best Use of Tavily if the form asks)
 35. [ ] Final check against the hackathon rules, then submit before **Oct 30, 10:00 AM PDT

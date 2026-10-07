@@ -12,7 +12,7 @@ Detecting a scam is only half the job. The other half is **acting**: verifying t
 breaking the scammer's isolation, and getting a real family member involved within seconds.
 
 **The family is the unit**, not the individual: one protected person (Maa), one or more
-guardians (Rahul, Anjali), one shared memory.
+guardians (Sujeet, Suvaani, Shivam), one shared memory.
 
 ## 2. Key insights
 
@@ -72,7 +72,7 @@ stream       memory    (signals)  (code)              (guardian approves)
 - **Assess** is the model's job: signals, rationale, who the caller claims to be.
 - **Decide** is plain code (a policy), not the model. The same signals always lead to the same
   action, which makes the agent predictable, testable and auditable.
-- **Learn** never changes memory on its own. It proposes ("Rahul mentioned a new job, add it?")
+- **Learn** never changes memory on its own. It proposes ("Sujeet mentioned a new job, add it?")
   and a guardian approves.
 
 **Tools the agent can use**
@@ -80,8 +80,8 @@ stream       memory    (signals)  (code)              (guardian approves)
 | Tool | Example |
 |---|---|
 | Code-word challenge | "Ask him our family code word." |
-| **"Is this you?" check** | Sends the *real* Rahul a one-tap message: "Someone claiming to be you is on a call with Maa. Is it you?" A "No" instantly tells Maa to hang up. |
-| Callback to the known number | The agent calls Rahul's saved number to confirm he is safe |
+| **"Is this you?" check** | Sends the *real* Sujeet a one-tap message: "Someone claiming to be you is on a call with Maa. Is it you?" A "No" instantly tells Maa to hang up. |
+| Callback to the known number | The agent calls Sujeet's saved number to confirm he is safe |
 | Official lookup | Tavily search on official domains only, plus a verified-numbers table (1930) |
 | Alert guardians | Email now; WhatsApp, SMS or a phone call later |
 | Scam report | Drafts a report for the national cyber-crime portal (1930 / cybercrime.gov.in) for Maa to send |
@@ -110,15 +110,15 @@ Channels ──▶ Ingest gateway ──▶ Streaming ASR pool ──▶ Agent s
 (Guardian Line,  (WebSocket /     (Parakeet / Riva,     (stateless;         (notify, lookup,
  companion, API)  telephony       GPU, autoscaled)      session in Redis)    verify, report)
                   media streams)                              │
-                                                        Model cascade
-                                                 Nemotron Nano: every turn (cheap)
-                                                 Nemotron Ultra: only on escalation
+                                                        Nemotron Ultra
+                                                 (cheaper cascade later, if a small
+                                                  model is tuned to match it)
 ```
 
 | Concern | Decision |
 |---|---|
 | Many calls at once | Stateless agent workers + a shared session store; scale out by adding workers |
-| Model cost | A cascade: a small Nemotron screens every turn; Ultra runs only when risk rises. On Token Factory, Nano costs about 1/12–1/16 of Ultra per token (checked Oct 6) |
+| Model cost | Ultra on every check for now: on Oct 7 it was both the fastest and most accurate (8/8, median 2.2 s) while Super, Nano and Lightning were slower and Nano/Lightning less accurate. A cheap-model cascade (Nano is ~1/12–1/16 of Ultra's price) only pays off once a small model is tuned to match; re-test at scale |
 | Speech-to-text | Streaming ASR on a GPU pool that grows and shrinks with live calls; cost is per live minute |
 | Latency | Warnings come from the cheap model and the built-in table first; slower steps (Ultra, lookup) add detail after |
 | Reliability | Every model call goes through the provider layer with a fallback; the policy works even when the model is down (fail safe: "verify before you pay") |

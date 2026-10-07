@@ -9,7 +9,7 @@
 - **The intervention is the climax.** The challenge and alert are the most visible moment of the
   demo.
 - **Memory is visible.** Show which profile was used and how the call differs from it
-  ("Rahul calls you Maa; this caller said Madam").
+  ("Sujeet calls you Maa; this caller said Madam").
 - **Control is obvious.** The user can always see what Ringproof remembers and delete it in one
   click.
 
@@ -40,7 +40,7 @@
 | Decision | Reason |
 |---|---|
 | Frame risk around *behavior* ("asked for secrecy + a wire transfer"), not "fake voice" | Detection is over content, not acoustics |
-| Frame risk around *this person* ("unusual for Rahul") when a profile exists | Memory is the differentiator; make it visible |
+| Frame risk around *this person* ("unusual for Sujeet") when a profile exists | Memory is the differentiator; make it visible |
 | The code word is shown masked (`••••`) in the UI | It's a secret |
 | Demo uses sample audio, not live calls | Live telephony is out of scope (see PRD) |
 | UI copy in plain English; transcripts shown in the call's language | English is primary; Hindi/Hinglish is a stretch goal (see PRD) |
