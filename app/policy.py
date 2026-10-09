@@ -69,6 +69,6 @@ def decide(
         actions.append(Action(
             kind="alert_guardian",
             target=alert_contact,
-            message=f"{names.get(alert_contact, 'Your trusted contact')} has been told about this call.",
+            message=f"Telling {names.get(alert_contact, 'your trusted contact')} about this call.",
         ))
     return actions

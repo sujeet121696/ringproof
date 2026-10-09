@@ -25,7 +25,7 @@ async function run<T>(mode: IDBTransactionMode, fn: (s: IDBObjectStore) => IDBRe
   })
 }
 
-export const getMemory = () => run<FamilyMemory | undefined>('readonly', (s) => s.get(KEY))
+const getMemory = () => run<FamilyMemory | undefined>('readonly', (s) => s.get(KEY))
 export const saveMemory = (m: FamilyMemory) => run('readwrite', (s) => s.put(m, KEY))
 
 const fetchSeed = (): Promise<FamilyMemory> => fetch('/api/seed/family').then((r) => r.json())
@@ -60,7 +60,7 @@ export function newContactId(name: string, taken: string[]): string {
   return id
 }
 
-// What the server may see about a contact: no code word, only whether one exists.
+// What the server may see about the claimed caller: no code word, only whether one exists.
 export function profileForServer(c: ContactMemory) {
   return {
     id: c.id,
@@ -71,5 +71,6 @@ export function profileForServer(c: ContactMemory) {
     never: c.never,
     past_requests: c.past_requests.map((r) => `${r.date}: ${r.what}`),
     has_code_word: Boolean(c.code_word),
+    email: c.email, // only to send this contact the "Is this you?" check
   }
 }

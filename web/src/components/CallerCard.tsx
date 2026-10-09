@@ -23,7 +23,8 @@ export function CallerCard(props: {
       {contact && (
         <>
           <p className="who-claim">
-            Says they are <strong>{contact.name}</strong> <span className="muted">({contact.relation})</span>
+            {/* A separator, not brackets: the relation is free text and may have its own brackets. */}
+            Says they are <strong>{contact.name}</strong> <span className="muted">· {contact.relation}</span>
           </p>
           <div className="memory">
             <p className="memory-label">

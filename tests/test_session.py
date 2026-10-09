@@ -71,3 +71,24 @@ def test_turns_are_never_held_back_by_slow_checks():
     turn_positions = [i for i, e in enumerate(events) if e["type"] == "turn"]
     first_risk = next(i for i, e in enumerate(events) if e["type"] == "risk")
     assert turn_positions == list(range(5)) and first_risk > 4
+
+
+def test_closing_mid_call_stops_checks_and_closes_links():
+    # The browser leaves (Stop, tab closed): finish() never runs, so close() must clean up.
+    from app import checks
+
+    async def go() -> tuple[CallSession, list[str]]:
+        async def send(ev: dict) -> None:
+            pass
+
+        session = CallSession(SlowBrain(delay=10), send, CONTACTS, [])
+        await session.add_turn(caller("Mummy, it's Sujeet"))
+        token = checks.open_check(lambda yes: session.send({}))
+        session._check_tokens.append(token)
+        session.close()
+        await asyncio.sleep(0)  # let the cancellation land
+        return session, [token]
+
+    session, tokens = asyncio.run(go())
+    assert session._task.cancelled()
+    assert not checks.is_open(tokens[0])

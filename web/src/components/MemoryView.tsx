@@ -74,7 +74,10 @@ export function MemoryView(props: { memory: FamilyMemory; onChange: (m: FamilyMe
         <ul className="contact-cards">
           {m.contacts.map((c) => (
             <li key={c.id} className="contact-card">
-              <p className="who"><strong>{c.name}</strong> <span className="muted">· {c.relation}</span></p>
+              <div className="contact-head">
+                <span className="avatar" aria-hidden="true">{Array.from(c.name.trim())[0]?.toUpperCase() ?? '?'}</span>
+                <div><strong>{c.name}</strong><span className="muted">{c.relation}</span></div>
+              </div>
               <ul className="facts">
                 <li>Calls you <strong>“{c.addresses_user_as}”</strong></li>
                 {c.usual_topics.length > 0 && <li>Talks about {c.usual_topics.join(', ')}</li>}

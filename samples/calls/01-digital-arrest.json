@@ -4,6 +4,7 @@
   "language": "en",
   "expected": {
     "score": "high",
+    "timeline": {"0": ["low"], "2": ["low", "medium", "high"], "4": ["medium", "high"], "5": ["high"], "7": ["high"], "8": ["high"], "10": ["high"]},
     "signals": ["impersonation", "isolation", "secrecy", "urgency", "transfer_ask"],
     "claimed_contact": null,
     "claimed_org": "CBI",

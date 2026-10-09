@@ -36,6 +36,8 @@ class Profile(BaseModel):
     past_requests: list[str] = []
     # Whether the browser holds a code word for this contact. The word itself never leaves it.
     has_code_word: bool = False
+    # Used only to send this contact the "Is this you?" check.
+    email: str = ""
 
 
 class AssessRequest(BaseModel):
@@ -56,6 +58,9 @@ class RiskResult(BaseModel):
     rationale: str
     claimed_contact: str | None = Field(None, description="Contact id, family only")
     claimed_org: str | None = None
+    # Set by the brain chain, not the model: which brain answered, and whether it was a backup.
+    checked_by: str = ""
+    backup: bool = False
 
 
 ActionKind = Literal[

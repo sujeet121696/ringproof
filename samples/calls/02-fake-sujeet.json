@@ -4,6 +4,7 @@
   "language": "en",
   "expected": {
     "score": "high",
+    "timeline": {"0": ["low", "medium"], "2": ["medium", "high"], "3": ["high"], "5": ["high"], "7": ["high"]},
     "signals": ["impersonation", "urgency", "secrecy", "transfer_ask", "out_of_character"],
     "claimed_contact": "sujeet",
     "claimed_org": null,

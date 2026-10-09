@@ -25,7 +25,7 @@
 | Risk meter | Low, medium or high, updating live |
 | Signals | Urgency, secrecy, transfer ask, impersonation, isolation and out-of-character, each lit with its triggering quote |
 | Actions | Idle, then personal challenge issued ("Ask for the family code word"), then trusted contact alerted |
-| Official check | The claimed organisation, its official helpline, one warning line, and the source link (from Tavily) |
+| Official check | 1930 (verified, with source), then up to 3 official pages about calls from the claimed organisation (Tavily, official domains only; never a number taken from search text) |
 
 **Memory view**
 
@@ -92,18 +92,29 @@ an icon set.
 ## 6. Built call screen (Oct 7)
 
 - Header: logo mark + text wordmark ("Ring" + "proof" in `--accent-green`), so it follows the app's
-  light/dark choice; tabs Call / Family memory; Auto / Light / Dark.
+  light/dark choice; tabs Call / Family memory; a gear button on the right opens Settings
+  (`SettingsMenu.tsx`): Theme (Auto / Light / Dark, each with an icon) and App (Install). New
+  settings are added there as their own section, so the header stays the same. Icons are
+  original line drawings in `components/icons.tsx` (no icon library).
 - Call view: sample picker, speed, Play. Transcript left (caller lines with a red edge and signal
   tags when flagged). Right column top to bottom: Risk (3-segment meter, level word, rationale,
   "checking…" while a check runs), What to do (the climax), Caller (claimed person + their memory,
   code word masked, the out-of-character quote), Official check (1930 + source), Warning signs
-  (all six, lit with quotes). On phones the right column comes first.
+  (all six, lit with quotes). On phones the right column comes first. On wide screens the
+  transcript stays in view (sticky) while the right column scrolls. If a backup model answered,
+  the risk card says so in one muted line.
+- Oct 9, motion and liveliness: start screen shows how it works (listens, knows the family, says
+  what to do); a call status bar (pulsing Live dot, call title, progress by call time, `0:20 / 1:03`);
+  "Listening" dots under the transcript while live; the risk word pops when the level changes; the
+  What-to-do card animates in on every new instruction, with a warning or check icon, and glows
+  twice when it turns high. `prefers-reduced-motion` turns every animation off. Contact cards show
+  an initial, the name in bold and the relation under it.
 - Memory view (Oct 8): privacy note on top (lavender), About you, one card per contact (Edit opens
   an inline form, code word masked with Show; Delete asks inline, no browser pop-ups), household
   rules (add/remove), who to alert, and Your data (Delete all memory with an inline confirm, Load
   demo family). Every edit saves to IndexedDB at once. Delete-all is one overwrite with an empty
   record, so a reload can't bring the demo family back.
-- Install (Oct 8): an "Install app" button in the header, shown only when the browser can install
+- Install (Oct 8): "Install on this device" in Settings, shown only when the browser can install
   (Chrome/Edge/Android) or on iPhone (tap shows "Share → Add to Home Screen"); hidden once
   installed. Opens full-screen without browser bars (`display: standalone`).
 

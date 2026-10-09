@@ -1,0 +1,27 @@
+{
+  "id": "fake-suvaani",
+  "title": "Fake daughter-in-law asks for hospital money (no code word set)",
+  "language": "en",
+  "_tests": "A high-risk claim to be a contact with no code word triggers the \"Is this you?\" check.",
+  "expected": {
+    "score": "high",
+    "timeline": {"0": ["low", "medium"], "2": ["medium", "high"], "3": ["high"], "5": ["high"]},
+    "signals": ["urgency", "transfer_ask", "secrecy", "out_of_character"],
+    "claimed_contact": "suvaani",
+    "claimed_org": null,
+    "action": "is_this_you_check",
+    "out_of_character": [
+      "calls her 'Mummy'; Suvaani says 'Mummy ji'",
+      "asks for money; Suvaani never does",
+      "asks her not to tell Sujeet"
+    ]
+  },
+  "turns": [
+    { "t": 0,  "speaker": "caller", "text": "Hello Mummy, it's Suvaani. I'm at the hospital and my phone is almost dead." },
+    { "t": 6,  "speaker": "user",   "text": "Suvaani? What happened, beta?" },
+    { "t": 9,  "speaker": "caller", "text": "Nothing serious, but they won't start the treatment until I pay thirty thousand. Please send it now to this UPI number, it is the hospital's." },
+    { "t": 19, "speaker": "caller", "text": "And please don't call Sujeet, he is in a meeting and he will panic." },
+    { "t": 25, "speaker": "user",   "text": "Let me check with Sujeet first." },
+    { "t": 28, "speaker": "caller", "text": "No Mummy, there is no time! Just send it, please." }
+  ]
+}

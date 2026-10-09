@@ -17,22 +17,9 @@
 .brand .word { font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; letter-spacing: -0.02em; }
 .brand b { color: var(--accent-green); font-weight: 800; }
 
-.install {
-  font: inherit; font-weight: 700; font-size: 0.85rem; cursor: pointer;
-  padding: 6px 14px; border-radius: 999px;
-  border: 1px solid var(--fg); background: var(--fg); color: var(--bg);
-}
-.install-wrap { position: relative; }
-.install-hint {
-  position: absolute; right: 0; top: calc(100% + 8px); z-index: 20; width: max-content; max-width: 240px;
-  padding: 8px 12px; border-radius: 10px; font-size: 0.85rem;
-  background: var(--card-bg); color: var(--fg); border: 1px solid var(--line);
-  box-shadow: 0 6px 20px rgb(0 0 0 / 0.12);
-}
-
-.tabs, .theme { display: flex; gap: 4px; }
+.tabs { display: flex; gap: 4px; }
 .tabs { flex: 1; }
-.tabs button, .theme button {
+.tabs button {
   border: 1px solid transparent;
   background: none;
   color: var(--muted);
@@ -42,8 +29,31 @@
   cursor: pointer;
 }
 .tabs button.on { background: var(--fg); color: var(--bg); }
-.theme button { font-size: 0.85rem; padding: 4px 10px; }
-.theme button.on { border-color: var(--line); color: var(--fg); }
+
+/* Settings: one gear button, a small panel with one section per setting */
+.settings { position: relative; }
+.icon-btn {
+  display: grid; place-items: center; width: 36px; height: 36px; padding: 0; cursor: pointer;
+  border-radius: 999px; border: 1px solid var(--line); background: none; color: var(--fg);
+}
+.icon-btn[aria-expanded="true"] { background: var(--fg); color: var(--bg); }
+.settings-panel {
+  position: absolute; right: 0; top: calc(100% + 8px); z-index: 20; width: 260px;
+  display: grid; gap: 14px; padding: 14px;
+  background: var(--card-bg); color: var(--fg); border: 1px solid var(--line); border-radius: 14px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.16);
+}
+.settings-panel h3 { margin: 0 0 8px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.segmented { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 3px; border: 1px solid var(--line); border-radius: 10px; }
+.segmented button, .menu-item {
+  display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer;
+  font: inherit; font-size: 0.85rem; font-weight: 600; padding: 6px 8px;
+  border: none; border-radius: 8px; background: none; color: var(--muted);
+}
+.segmented button.on { background: var(--fg); color: var(--bg); }
+.menu-item { width: 100%; justify-content: flex-start; color: var(--fg); border: 1px solid var(--line); }
+.menu-item:hover, .segmented button:not(.on):hover { color: var(--fg); background: color-mix(in srgb, var(--fg) 8%, transparent); }
+.settings-panel .hint { margin: 8px 0 0; font-size: 0.85rem; }
 
 .page { max-width: 1240px; margin: 0 auto; padding: 20px 16px 48px; }
 
@@ -87,11 +97,45 @@
 .controls button.go { background: var(--fg); color: var(--bg); }
 .controls button.stop { background: var(--risk-high); color: #fff; }
 .controls button:disabled { opacity: 0.5; cursor: default; }
-.controls .ended { align-self: center; }
 
-.empty { text-align: center; padding: 48px 24px; }
-.empty h2 { font-size: 1.4rem; }
-.empty p { max-width: 36rem; margin: 0 auto; }
+.empty { text-align: center; padding: 40px 24px; }
+.empty h2 { font-size: 1.4rem; margin-bottom: 24px; }
+/* How it works: three steps, side by side on wide screens */
+.steps {
+  list-style: none; margin: 0 auto; padding: 0; max-width: 900px;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;
+}
+.steps li {
+  display: grid; justify-items: center; align-content: start; gap: 6px; padding: 18px 16px;
+  border: 1px solid var(--line); border-radius: 14px; background: var(--bg);
+  animation: appear 0.4s ease-out both;
+}
+.steps li:nth-child(2) { animation-delay: 0.08s; }
+.steps li:nth-child(3) { animation-delay: 0.16s; }
+.steps .muted { font-size: 0.9rem; line-height: 1.45; }
+.step-icon {
+  display: grid; place-items: center; width: 44px; height: 44px; border-radius: 999px;
+  color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+/* Call status: live dot, which call, progress */
+.call-status {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 10px 16px; margin-bottom: 16px; border-radius: 14px;
+  background: var(--card-bg); border: 1px solid var(--line); animation: appear 0.3s ease-out;
+}
+.call-status .dot { width: 10px; height: 10px; border-radius: 999px; background: var(--muted); flex: none; }
+.call-status.live .dot { background: var(--risk-high); animation: live-dot 1.4s ease-out infinite; }
+@keyframes live-dot {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--risk-high) 60%, transparent); }
+  100% { box-shadow: 0 0 0 8px transparent; }
+}
+.call-status-text { display: grid; min-width: 0; flex: 1 1 220px; }
+.call-status-text .muted { font-size: 0.85rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.progress { flex: 1 1 160px; height: 6px; border-radius: 999px; background: var(--line); overflow: hidden; }
+.progress span { display: block; height: 100%; border-radius: inherit; background: var(--accent); transition: width 0.6s ease-out; }
+.call-status.ended .progress span { background: var(--muted); }
+.clock { font-variant-numeric: tabular-nums; font-size: 0.85rem; color: var(--muted); }
 
 /* Call grid: transcript left, everything about the decision right */
 .call-grid {
@@ -107,7 +151,10 @@
 }
 
 /* Transcript */
-.transcript { max-height: calc(100vh - 200px); overflow-y: auto; }
+/* 260px: header, controls and the call status bar above it, so its end stays on screen. */
+.transcript { max-height: calc(100vh - 260px); overflow-y: auto; }
+/* Wide screens: keep the transcript beside the right column while it scrolls (header is 59px). */
+@media (min-width: 861px) { .transcript { position: sticky; top: 75px; } }
 .lines { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .line { padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); animation: appear 0.3s ease-out; }
 .line.caller { background: var(--bg); }
@@ -117,6 +164,12 @@
 .who { font-size: 0.8rem; font-weight: 700; color: var(--muted); display: flex; gap: 8px; }
 .time { font-weight: 400; }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.listening { display: flex; align-items: center; gap: 8px; margin: 12px 0 0; font-size: 0.85rem; color: var(--muted); }
+.dots { display: inline-flex; gap: 3px; }
+.dots i { width: 6px; height: 6px; border-radius: 999px; background: currentColor; animation: dot 1.2s ease-in-out infinite; }
+.dots i:nth-child(2) { animation-delay: 0.15s; }
+.dots i:nth-child(3) { animation-delay: 0.3s; }
+@keyframes dot { 0%, 60%, 100% { opacity: 0.25; transform: none; } 30% { opacity: 1; transform: translateY(-3px); } }
 .tag {
   font-size: 0.75rem;
   font-weight: 700;
@@ -138,14 +191,26 @@
 .seg.high.on { background: var(--risk-high); }
 .risk.medium .seg.low, .risk.high .seg.low { background: var(--risk-low); opacity: 0.35; }
 .risk.high .seg.medium { background: var(--risk-medium); opacity: 0.35; }
-.level { font-family: var(--font-display); font-weight: 800; font-size: 1.8rem; margin: 10px 0 4px; }
+.level { font-family: var(--font-display); font-weight: 800; font-size: 1.8rem; margin: 10px 0 4px; animation: pop 0.35s ease-out; }
+@keyframes pop { from { opacity: 0; transform: scale(0.92); } }
 .risk.high .level { color: var(--risk-high); }
 .why { margin: 0; color: var(--muted); line-height: 1.45; }
+.backup-note { margin: 8px 0 0; font-size: 0.85rem; color: var(--muted); font-style: italic; }
 
 /* Action: the climax */
 .action.idle { border-style: dashed; }
 .action.medium { border-color: var(--risk-medium); }
-.action.high { border: 2px solid var(--risk-high); background: var(--risk-high-bg); }
+.action { animation: appear 0.35s ease-out; }
+.action.high { border: 2px solid var(--risk-high); background: var(--risk-high-bg); animation: appear 0.35s ease-out, alarm 1.2s ease-out 0.35s 2; }
+@keyframes alarm {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--risk-high) 50%, transparent); }
+  100% { box-shadow: 0 0 0 14px transparent; }
+}
+.headline-row { display: flex; gap: 10px; align-items: flex-start; }
+.action-icon { flex: none; margin-top: 2px; color: var(--muted); }
+.action.medium .action-icon { color: var(--risk-medium); }
+.action.high .action-icon { color: var(--risk-high); }
+.action.low .action-icon { color: var(--risk-low); }
 .action.low { border: 2px solid var(--risk-low); }
 .headline { font-family: var(--font-display); font-weight: 800; font-size: 1.35rem; line-height: 1.3; margin: 0; }
 .action.high .headline { font-size: 1.5rem; }
@@ -162,6 +227,11 @@
 /* Official check */
 .official .number { font-family: var(--font-display); font-weight: 800; font-size: 2.2rem; margin: 0; }
 .official p { margin: 0 0 6px; }
+.org-check { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
+.org-check .org-head { font-weight: 700; font-size: 0.9rem; }
+.org-check ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.org-check li { font-size: 0.88rem; }
+.org-check q { display: block; color: var(--muted); margin-top: 2px; }
 
 /* Signals */
 .signals ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
@@ -207,7 +277,15 @@
   display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px;
 }
 .contact-card { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: grid; gap: 8px; align-content: start; }
-.contact-card .who { margin: 0; }
+.contact-head { display: flex; align-items: center; gap: 10px; }
+.contact-head > div { display: grid; min-width: 0; }
+.contact-head strong { font-size: 1.05rem; }
+.contact-head .muted { font-size: 0.85rem; }
+.avatar {
+  display: grid; place-items: center; width: 36px; height: 36px; border-radius: 999px; flex: none;
+  font-family: var(--font-display); font-weight: 800; color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+}
 .contact-card .facts { margin: 0; padding-left: 18px; font-size: 0.9rem; line-height: 1.6; }
 .contact-form { border: 1px solid var(--accent); border-radius: 12px; padding: 14px; margin-top: 12px; }
 .contact-form h3 { margin: 0 0 10px; font-size: 0.95rem; }
@@ -218,3 +296,8 @@
 .rules li { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
 .add-rule { display: flex; gap: 8px; }
 .danger-zone h2 { color: var(--risk-high); }
+
+/* Respect "reduce motion": no animations or transitions at all. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

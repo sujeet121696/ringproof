@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react'
+import { mmss } from '../format'
 import { SIGNAL_LABELS, type Signal, type Turn } from '../types'
 
 const norm = (s: string) => s.toLowerCase().replace(/\s+/g, ' ').trim()
-const mmss = (t: number) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`
 
 // A line is flagged when a signal's quote comes from it (the model quotes the caller's words).
 function signalsFor(turn: Turn, signals: Signal[]): Signal[] {
@@ -14,12 +14,13 @@ function signalsFor(turn: Turn, signals: Signal[]): Signal[] {
   })
 }
 
-export function Transcript(props: { turns: Turn[]; signals: Signal[]; userName: string }) {
+export function Transcript(props: { turns: Turn[]; signals: Signal[]; userName: string; live: boolean }) {
   // Scroll the transcript box itself (not the page) to the newest line.
   const box = useRef<HTMLElement>(null)
   useEffect(() => {
     const el = box.current
-    if (el) el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' })
+    const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (el) el.scrollTo({ top: el.scrollHeight, behavior: calm ? 'auto' : 'smooth' })
   }, [props.turns.length])
 
   return (
@@ -47,6 +48,11 @@ export function Transcript(props: { turns: Turn[]; signals: Signal[]; userName: 
           )
         })}
       </ol>
+      {props.live && (
+        <p className="listening" aria-hidden="true">
+          <span className="dots"><i /><i /><i /></span> Listening
+        </p>
+      )}
     </section>
   )
 }

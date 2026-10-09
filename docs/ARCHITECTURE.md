@@ -67,6 +67,12 @@ ringproof/
 | Action layer (tools) | Policy decision + profile + lookup | Personal challenge, "Is this you?" check, helpline, trusted-contact alert |
 | Dashboard | All of the above | Live transcript, risk meter, signals, actions, memory view |
 | App shell (`web/public/sw.js`) | Browser | Makes it installable on phones; caches only the app files, never `/api`, `/ws` or memory |
+| Production serving (`app/web.py`) | `web/dist` (built) | One process, one port: the API also serves the dashboard; hashed `assets/` cached a year, everything else re-checked; safe security headers on every response |
+
+**Production run** (Oct 9): `cd web && npm run build`, then from the repo root
+`PUBLIC_BASE_URL=https://ringproof.kharidwise.com uvicorn app.main:app --port 8200` (no `--reload`).
+A Cloudflare Tunnel maps `ringproof.kharidwise.com` to `http://localhost:8200`; one tunnel can
+serve several hostnames. Not yet added: a Content Security Policy (needs testing on every page).
 
 ## 4. Cached transcripts (cost control)
 
@@ -85,11 +91,14 @@ calls) for building the dashboard.
 
 | Call | Primary | Fallback |
 |---|---|---|
-| Reasoning | Nemotron 3 Ultra on Nebius | Nemotron 3 Super on Nebius (same API, cheaper; stays NVIDIA + Nebius) |
+| Reasoning | Nemotron 3 Ultra on Nebius | Nemotron 3 Super on Nebius (same API, cheaper; stays NVIDIA + Nebius), then keyword rules if both are down |
 | Transcription | Parakeet on Nebius | Cached transcripts (demo); self-hosted weights elsewhere (dev only) |
 
 The reasoning fallback swaps to a smaller Nemotron on the same Token Factory account, so the
-demo stays on Nebius and NVIDIA models even when Ultra is slow or rate-limited.
+demo stays on Nebius and NVIDIA models even when Ultra is slow or rate-limited. If Nebius is
+unreachable, the zero-cost keyword rules (`app/brain/keywords.py`) still give a rough warning, since
+silence during a scam is the worst outcome. Each result carries `checked_by` and `backup`, and
+the risk card says when a backup answered. Tested Oct 8 by forcing failures (TASKS 25).
 
 **Rule:** the hackathon requires the project to run on Nebius. The **demo** must use Nebius.
 Non-Nebius hosts (self-hosted ASR weights) are for development only, never for the submitted demo.
@@ -119,15 +128,21 @@ Non-Nebius hosts (self-hosted ASR weights) are for development only, never for t
 
 ## 8. Lookup (Tavily)
 
-- **Trigger:** the risk engine returns a `claimed_org` (CBI, police, RBI, a bank, a courier).
+- **Code:** `app/lookup.py` (`Lookup` interface: `TavilyLookup`, or `NoLookup` when no key is set).
+- **Trigger:** the risk is medium or high and the risk engine returns a new `claimed_org` (CBI,
+  police, a bank, a courier). Each organisation is looked up once per call; results are cached
+  per organisation for 24 h (in memory; a shared cache when there are several servers).
 - **Query:** only the organisation name + "official helpline" / "scam warning". Never the
   transcript, the family memory or the user's details.
-- **Trust:** restrict results to an allowlist of official domains (`.gov.in`, `rbi.org.in`,
-  `cybercrime.gov.in`, bank domains). A built-in table of verified numbers (e.g. 1930) wins over
-  any search result.
+- **Trust:** Tavily `include_domains` = `gov.in`, `nic.in`, `rbi.org.in`, `npci.org.in` (subdomains
+  match), and every result URL is checked again in code. **Phone numbers are never taken from
+  search text**: a wrong number is worse than none. The number shown comes only from the verified
+  table (`policy.NATIONAL_HELPLINE`, 1930).
 - **Latency:** the challenge never waits for Tavily. It goes out from the built-in table, and
   the lookup adds details and sources when it returns.
-- **Output shown to the user:** one helpline number, one warning line, and the source link.
+- **Output shown to the user:** 1930 with its source, then up to 3 official pages (site + a
+  trimmed excerpt) about calls from that organisation. "No official page found" or "Could not
+  check" are shown as such. Measured Oct 8: ~4 s per search, never blocks the call.
 
 ## 9. Verification challenge
 
@@ -139,6 +154,31 @@ The challenge depends on who the caller claims to be:
 | Family member **without** a code word | **"Is this you?" check:** the *real* contact gets an email with a one-tap "Yes, it's me" / "No, it's not me" link. A "No" immediately tells the user to hang up. Replaces the earlier OTP idea: simpler for the contact, and it pulls the real family member in. |
 | An organisation (CBI, police, bank…) | No challenge, because the caller can't be verified mid-call. Instruction: "Hang up and call the official helpline," with the number from the built-in table or the lookup. The instruction doesn't name the organisation, because the claim can change mid-call (courier → customs → CBI); the caller card shows the current claim. |
 | Unknown | Generic signals only; high risk gives the same "hang up" instruction. |
+
+**Messages to family** (`app/notify.py`, `app/checks.py`, built Oct 8):
+- One `Notifier` interface; email over SMTP first (Gmail app password, as in Resolve's
+  `mailer.ts`). SMS / WhatsApp / push can be added later without touching the session.
+- **Alert** to the trusted contact: who the caller claimed to be + the risk rationale, never the
+  transcript or the code word. **"Is this you?"** to the claimed contact: a link to
+  `/api/check/{token}`; the page asks, and only a button press (POST) answers, so a mail scanner
+  opening links can't answer. One answer per token; tokens close when the call ends, and also
+  when the browser leaves mid-call (Stop, tab closed): `CallSession.close()` then cancels the
+  running checks too, so nothing is sent to a closed socket. A send that fails in any way is
+  shown as not sent; it never ends the call.
+- The screen says "Email sent" only after the server confirms it (`notified` event); otherwise it
+  shows the reason. If the "Is this you?" email can't go out, the instruction becomes "Do not send
+  anything. Hang up and call them back on their usual number."
+- The browser sends only the alert contact's email (in `start`) and the claimed contact's email
+  (in `profile`), never anyone else's.
+- Demo: `@example.com` addresses go to `EMAIL_DEMO_REDIRECT_TO` when set.
+
+**On a public server** (Oct 8, before the deploy). Anyone can open the demo URL, so:
+- Email goes only to `EMAIL_DEMO_REDIRECT_TO` and `EMAIL_ALLOWED_TO`. Closed by default: addresses
+  come from the browser, so without this the server would email strangers from our account.
+  Later, contacts who confirm their address replace the list (VISION §6).
+- At most `MAX_LIVE_CALLS` calls at once (default 3), and replay speed is bounded (0.1×–4×), so
+  visitors can't run unlimited model calls. A refused call shows the reason on screen.
+- No open model endpoint: the model is reached only through a call session.
 
 ## 10. Built to grow
 
@@ -160,13 +200,16 @@ Reference client: `scripts/ws_replay.py`.
 
 | Direction | `type` | Fields | When |
 |---|---|---|---|
-| browser → server | `start` | `sample_id`, `speed`, `contacts[]` (id, name, relation), `household_rules[]`, `alert_contact` | First message |
+| browser → server | `start` | `sample_id`, `speed`, `contacts[]` (id, name, relation), `household_rules[]`, `alert_contact`, `alert_email`, `user_called` | First message |
 | server → browser | `started` | `sample`, `duration` | Call begins |
 | server → browser | `turn` | `index`, `turn` (`t`, `speaker`, `text`) | Each transcript line, at call speed |
 | server → browser | `risk` | `upto`, `ms`, `with_profile`, `result` (RiskResult) | After caller turns; runs in the background |
 | server → browser | `need_profile` | `contact` | The model named a family contact |
-| browser → server | `profile` | `profile` with `has_code_word` (true/false; never the word itself; unknown fields are dropped) | Reply to `need_profile` |
+| browser → server | `profile` | `profile` with `has_code_word` (true/false; never the word itself; unknown fields are dropped) and `email` | Reply to `need_profile` |
 | server → browser | `action` | `upto`, `action` (`kind`, `message`, `target`, `helpline`) | The policy (`app/policy.py`) picks a new action; each kind is sent once per call |
+| server → browser | `lookup` | `ok`, `result` (`org`, `sources[]`: title, url, snippet) | Risk is medium/high and the caller claims a new organisation; once per organisation |
+| server → browser | `notified` | `kind`, `target`, `channel`, `ok`, `reason` | An alert or "Is this you?" message was sent (`ok`) or not (`reason`) |
+| server → browser | `check_answer` | `target`, `answer` (`yes`/`no`) | The real contact answered "Is this you?" during the call |
 | server → browser | `error` | `message` | A risk check failed; the call keeps going |
 | server → browser | `end` | | After the last risk check; nothing is kept |
 

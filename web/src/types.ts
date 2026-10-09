@@ -24,6 +24,8 @@ export type RiskResult = {
   rationale: string
   claimed_contact: string | null
   claimed_org: string | null
+  checked_by: string // which brain answered
+  backup: boolean // true when the main model was unavailable
 }
 
 export type Action = {
@@ -33,12 +35,21 @@ export type Action = {
   helpline: { name: string; number: string; source: string } | null
 }
 
+// What official sites say about a claimed organisation (app/lookup.py).
+export type OrgCheck = { org: string; sources: { title: string; url: string; snippet: string }[] }
+export type Lookup = OrgCheck & { ok: boolean }
+// Whether an alert / "Is this you?" message really went out (app/notify.py).
+export type Notified = { ok: boolean; reason: string | null }
+
 export type CallEvent =
   | { type: 'started'; sample: { id: string; title: string }; duration: number }
   | { type: 'turn'; index: number; turn: Turn }
   | { type: 'risk'; upto: number; ms: number; with_profile: boolean; result: RiskResult }
   | { type: 'need_profile'; contact: string }
   | { type: 'action'; upto: number; action: Action }
+  | { type: 'lookup'; ok: boolean; result: OrgCheck }
+  | { type: 'notified'; kind: ActionKind; target: string | null; channel: string; ok: boolean; reason: string | null }
+  | { type: 'check_answer'; target: string; answer: 'yes' | 'no' }
   | { type: 'error'; message: string }
   | { type: 'end' }
 

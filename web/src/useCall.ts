@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { profileForServer } from './memory'
-import type { Action, CallEvent, FamilyMemory, RiskResult, Signal, Turn } from './types'
+import type { Action, ActionKind, CallEvent, FamilyMemory, Lookup, Notified, RiskResult, Signal, Turn } from './types'
 
 export type ChallengeStatus = 'waiting' | 'passed' | 'failed'
 export type Challenge = { target: string; status: ChallengeStatus }
@@ -16,6 +16,9 @@ export type CallState = {
   signals: Signal[] // every signal seen this call, so highlights don't flicker
   actions: Action[]
   challenge: Challenge | null
+  lookup: Lookup | null // latest official check (the claimed organisation can change mid-call)
+  notified: Partial<Record<ActionKind, Notified>>
+  checkAnswer: 'yes' | 'no' | null // the real contact's reply to "Is this you?"
   error: string | null
 }
 
@@ -30,6 +33,9 @@ const IDLE: CallState = {
   signals: [],
   actions: [],
   challenge: null,
+  lookup: null,
+  notified: {},
+  checkAnswer: null,
   error: null,
 }
 
@@ -97,10 +103,17 @@ export function useCall(memory: FamilyMemory | null) {
             withProfile: ev.with_profile,
             signals: [...s.signals, ...fresh],
             checking: ev.upto < lastCallerUpto,
+            error: null, // a check worked again, so an earlier "check failed" is out of date
           }
         }
         case 'action':
           return { ...s, actions: [...s.actions, ev.action], challenge }
+        case 'lookup':
+          return { ...s, lookup: { ...ev.result, ok: ev.ok } }
+        case 'notified':
+          return { ...s, notified: { ...s.notified, [ev.kind]: { ok: ev.ok, reason: ev.reason } } }
+        case 'check_answer':
+          return { ...s, checkAnswer: ev.answer }
         case 'error':
           return { ...s, error: ev.message }
         case 'end':
@@ -131,6 +144,9 @@ export function useCall(memory: FamilyMemory | null) {
           contacts: mem.contacts.map(({ id, name, relation }) => ({ id, name, relation })),
           household_rules: mem.household_rules,
           alert_contact: mem.alert_contact,
+          // Only the alert contact's email, so Ringproof can alert them.
+          alert_email: mem.contacts.find((x) => x.id === mem.alert_contact)?.email ?? '',
+          user_called: mem.user.called,
         }),
       )
     socket.onmessage = (msg) => {
@@ -145,6 +161,17 @@ export function useCall(memory: FamilyMemory | null) {
     }
     socket.onerror = () => {
       if (ws.current === socket) setState((s) => ({ ...s, error: 'Lost connection to Ringproof.' }))
+    }
+    // 1000 is the normal close after `end`. Anything else (busy, unknown sample, server gone)
+    // shows the server's reason, so the screen never sits silently.
+    socket.onclose = (e) => {
+      if (ws.current !== socket || e.code === 1000) return
+      setState((s) => ({
+        ...s,
+        status: s.status === 'live' ? 'ended' : s.status,
+        checking: false,
+        error: e.reason || 'Lost connection to Ringproof.',
+      }))
     }
     // handle only touches refs and setState, so it is safe to leave out of the deps.
     // eslint-disable-next-line react-hooks/exhaustive-deps

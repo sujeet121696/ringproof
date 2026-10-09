@@ -4,6 +4,7 @@
   "language": "en",
   "expected": {
     "score": "low",
+    "timeline": {"0": ["low"], "2": ["low"], "3": ["low"], "5": ["low"]},
     "signals": [],
     "claimed_contact": null,
     "claimed_org": "Gomti Bank",

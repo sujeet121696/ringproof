@@ -15,6 +15,7 @@ their consent); every other detail, including the code word, is made up. The ban
 | `calls/07-fake-bank-otp.json` | Fake bank asks for an OTP (breaks a household rule) | **high** |
 | `calls/08-fake-shivam-early.json` | "Shivam" asks for secrecy, cut off before any money ask | **medium** |
 | `calls/09-real-sahni.json` | Sahni invites Maa to a family function | **low** |
+| `calls/10-fake-suvaani.json` | Fake daughter-in-law wants hospital money in secret (no code word set) | **high**, "Is this you?" check |
 
 **Call format.** `turns[]` has `t` (seconds from call start, used for replay at call speed),
 `speaker` (`caller` or `user`) and `text`. `expected` is the ground truth for
