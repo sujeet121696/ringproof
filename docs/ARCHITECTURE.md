@@ -34,7 +34,7 @@ Call audio (sample upload/stream)          [M] Family memory
 | Lookup | Tavily Search API | Tavily (external API, no personal data sent) |
 | Family memory | Browser IndexedDB | On the user's device only |
 | Backend | Python 3.12 + FastAPI | Render (or a small Nebius VM) |
-| Dashboard | React 19 + Vite + TypeScript | Served with the backend |
+| Dashboard | React 19 + Vite + TypeScript, installable (PWA) | Served with the backend |
 | Trusted-contact alert | Email (SMTP) | Same app as the backend |
 
 **Decided 2026-09-27:** Python backend + React dashboard. Python keeps the backend in the same
@@ -66,6 +66,7 @@ ringproof/
 | Policy | Risk result + caller type | Which action to take (plain code, not the model) |
 | Action layer (tools) | Policy decision + profile + lookup | Personal challenge, "Is this you?" check, helpline, trusted-contact alert |
 | Dashboard | All of the above | Live transcript, risk meter, signals, actions, memory view |
+| App shell (`web/public/sw.js`) | Browser | Makes it installable on phones; caches only the app files, never `/api`, `/ws` or memory |
 
 ## 4. Cached transcripts (cost control)
 

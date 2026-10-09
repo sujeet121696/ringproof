@@ -17,6 +17,19 @@
 .brand .word { font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; letter-spacing: -0.02em; }
 .brand b { color: var(--accent-green); font-weight: 800; }
 
+.install {
+  font: inherit; font-weight: 700; font-size: 0.85rem; cursor: pointer;
+  padding: 6px 14px; border-radius: 999px;
+  border: 1px solid var(--fg); background: var(--fg); color: var(--bg);
+}
+.install-wrap { position: relative; }
+.install-hint {
+  position: absolute; right: 0; top: calc(100% + 8px); z-index: 20; width: max-content; max-width: 240px;
+  padding: 8px 12px; border-radius: 10px; font-size: 0.85rem;
+  background: var(--card-bg); color: var(--fg); border: 1px solid var(--line);
+  box-shadow: 0 6px 20px rgb(0 0 0 / 0.12);
+}
+
 .tabs, .theme { display: flex; gap: 4px; }
 .tabs { flex: 1; }
 .tabs button, .theme button {
@@ -165,4 +178,43 @@
 .signals li.lit .mark { background: var(--risk-high); color: #fff; }
 .signals q { display: block; font-size: 0.9rem; color: var(--muted); margin-top: 2px; }
 
-.contact-list { line-height: 1.9; padding-left: 18px; }
+/* Family memory view */
+.memory-view { display: grid; gap: 16px; }
+.memory-view input, .memory-view textarea, .memory-view select {
+  font: inherit; color: var(--fg); background: var(--bg);
+  border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; min-width: 0; width: 100%;
+}
+.memory-view textarea { resize: vertical; }
+.memory-view label { display: grid; gap: 4px; font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+.memory-view .hint { font-weight: 400; font-size: 0.8rem; }
+.memory-view .small { font-size: 0.85rem; margin-top: -4px; }
+.privacy { background: var(--note-bg); }
+.privacy p { margin: 0; }
+.card-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.field-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 12px; }
+.btn {
+  font: inherit; font-weight: 700; font-size: 0.88rem; cursor: pointer;
+  padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line);
+  background: var(--card-bg); color: var(--fg);
+}
+.btn.small { padding: 3px 10px; font-size: 0.8rem; }
+.btn.go { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.btn.danger { background: var(--risk-high); color: #fff; border-color: var(--risk-high); }
+.btn:disabled { opacity: 0.5; cursor: default; }
+.row-btns { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.contact-cards {
+  list-style: none; margin: 12px 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px;
+}
+.contact-card { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: grid; gap: 8px; align-content: start; }
+.contact-card .who { margin: 0; }
+.contact-card .facts { margin: 0; padding-left: 18px; font-size: 0.9rem; line-height: 1.6; }
+.contact-form { border: 1px solid var(--accent); border-radius: 12px; padding: 14px; margin-top: 12px; }
+.contact-form h3 { margin: 0 0 10px; font-size: 0.95rem; }
+.contact-form .code { max-width: 360px; margin-bottom: 12px; }
+.code-input { display: flex; gap: 8px; align-items: center; }
+.memory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.rules { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 6px; }
+.rules li { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.add-rule { display: flex; gap: 8px; }
+.danger-zone h2 { color: var(--risk-high); }

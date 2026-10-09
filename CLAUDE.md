@@ -10,7 +10,7 @@ triggers a personal verification challenge (family code word) and a trusted-cont
 |---|---|
 | Hackathon | Nebius × NVIDIA Global AI Hackathon |
 | Track | Personal AI (family memory + data control are core) |
-| Deadline | Oct 30, 2026 |
+| Deadline | Oct 30, 2026 (we submit by Oct 23) |
 | Stack | Python + FastAPI backend, React + Vite dashboard |
 | Team | Solo |
 | Status | Week 1 done: credits, keys, scaffold, Nemotron + Tavily smoke tests |

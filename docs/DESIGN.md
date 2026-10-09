@@ -98,6 +98,14 @@ an icon set.
   "checking…" while a check runs), What to do (the climax), Caller (claimed person + their memory,
   code word masked, the out-of-character quote), Official check (1930 + source), Warning signs
   (all six, lit with quotes). On phones the right column comes first.
+- Memory view (Oct 8): privacy note on top (lavender), About you, one card per contact (Edit opens
+  an inline form, code word masked with Show; Delete asks inline, no browser pop-ups), household
+  rules (add/remove), who to alert, and Your data (Delete all memory with an inline confirm, Load
+  demo family). Every edit saves to IndexedDB at once. Delete-all is one overwrite with an empty
+  record, so a reload can't bring the demo family back.
+- Install (Oct 8): an "Install app" button in the header, shown only when the browser can install
+  (Chrome/Edge/Android) or on iPhone (tap shows "Share → Add to Home Screen"); hidden once
+  installed. Opens full-screen without browser bars (`display: standalone`).
 
 ## 7. Open questions
 
