@@ -1,7 +1,8 @@
 """Terminal client for /ws/call: plays the browser's role and prints events as they arrive.
 
 It holds the family memory (samples/family.json), sends contact names only, and answers
-`need_profile` with that one profile, without the code word, as the dashboard will.
+`need_profile` with that one profile, without the code word, as the dashboard does. Like the
+dashboard, it sends the email addresses used for the alert and the "Is this you?" check.
 
 Usage (backend running on :8100):
   .venv/Scripts/python -m scripts.ws_replay digital-arrest --speed 2
@@ -14,11 +15,12 @@ import time
 
 import websockets
 
-from scripts.eval_samples import load_family
+from scripts.eval_samples import SAMPLES, load_family
 
 
 async def main(sample_id: str, speed: float, url: str) -> None:
     contacts, profiles, rules, alert = load_family()
+    user_called = json.loads((SAMPLES / "family.json").read_text(encoding="utf-8"))["user"]["called"]
     async with websockets.connect(url) as ws:
         await ws.send(json.dumps({
             "type": "start",
@@ -27,6 +29,8 @@ async def main(sample_id: str, speed: float, url: str) -> None:
             "contacts": [c.model_dump() for c in contacts],
             "household_rules": rules,
             "alert_contact": alert,
+            "alert_email": profiles[alert].email if alert in profiles else "",
+            "user_called": user_called,
         }))
         t0 = time.perf_counter()
         async for raw in ws:
@@ -53,6 +57,17 @@ async def main(sample_id: str, speed: float, url: str) -> None:
             elif kind == "action":
                 a = ev["action"]
                 print(f"{at}   ** ACTION {a['kind']}: {a['message']}")
+            elif kind == "lookup":
+                r = ev["result"]
+                status = f"{len(r['sources'])} official page(s)" if ev["ok"] else "lookup failed"
+                print(f"{at}   ?? official check for {r['org']!r}: {status}")
+                for src in r["sources"]:
+                    print(f"{at}      - {src['url']}")
+            elif kind == "notified":
+                sent = "sent" if ev["ok"] else f"NOT sent ({ev['reason']})"
+                print(f"{at}   ** {ev['kind']} {ev['channel']} to {ev['target']}: {sent}")
+            elif kind == "check_answer":
+                print(f"{at}   ** {ev['target']} answered 'Is this you?': {ev['answer']}")
             elif kind == "error":
                 print(f"{at}   !! {ev['message']}")
             elif kind == "end":

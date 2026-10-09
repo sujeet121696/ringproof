@@ -36,6 +36,7 @@ def load_family() -> tuple[list[Contact], dict[str, Profile], list[str], str | N
             never=c["never"],
             past_requests=[f'{r["date"]}: {r["what"]}' for r in c["past_requests"]],
             has_code_word=bool(c.get("code_word")),
+            email=c.get("email", ""),
         )
     return contacts, profiles, family["household_rules"], family.get("alert_contact")
 
@@ -78,7 +79,7 @@ async def main(only: list[str], repeat: int) -> None:
         }
         ok = all(checks.values())
         passed += ok
-        print(f"{'PASS' if ok else 'FAIL'}  {call['id']:<15} {secs:5.1f}s")
+        print(f"{'PASS' if ok else 'FAIL'}  {call['id']:<15} {secs:5.1f}s  {result.checked_by}")
         print(f"      score {result.score} (want {exp['score']})"
               f" | contact {result.claimed_contact} (want {exp['claimed_contact']})"
               f" | org {result.claimed_org} (want {exp['claimed_org']})")

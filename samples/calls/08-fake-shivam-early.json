@@ -5,6 +5,7 @@
   "_tests": "The greeting matches Shivam (Mummy), so out_of_character must come from behaviour (secrecy, which his profile says he never asks for), not words alone. No ask yet, so medium, not high. Urgency is borderline here and not required.",
   "expected": {
     "score": "medium",
+    "timeline": {"0": ["low", "medium"], "2": ["medium"]},
     "signals": ["secrecy", "out_of_character"],
     "claimed_contact": "shivam",
     "claimed_org": null,

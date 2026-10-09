@@ -1,40 +1,16 @@
 import { useEffect, useState } from 'react'
 import { CallView } from './components/CallView'
-import { InstallButton } from './components/InstallButton'
 import { MemoryView } from './components/MemoryView'
+import { SettingsMenu } from './components/SettingsMenu'
 import { loadOrSeed, saveMemory } from './memory'
 import type { FamilyMemory } from './types'
 import './App.css'
-
-type Theme = 'system' | 'light' | 'dark'
-
-function readTheme(): Theme {
-  try {
-    const t = localStorage.getItem('theme')
-    return t === 'light' || t === 'dark' ? t : 'system'
-  } catch {
-    return 'system'
-  }
-}
-
-// Same mechanism as kharidwise: data-theme on <html>, saved choice applied before paint by theme-init.js.
-function applyTheme(t: Theme) {
-  if (t === 'system') delete document.documentElement.dataset.theme
-  else document.documentElement.dataset.theme = t
-  try {
-    if (t === 'system') localStorage.removeItem('theme')
-    else localStorage.setItem('theme', t)
-  } catch {
-    /* storage blocked: the choice just won't persist */
-  }
-}
 
 function App() {
   const [memory, setMemory] = useState<FamilyMemory | null>(null)
   const [failed, setFailed] = useState(false)
   const [saveFailed, setSaveFailed] = useState(false)
   const [tab, setTab] = useState<'call' | 'memory'>('call')
-  const [theme, setTheme] = useState<Theme>(readTheme)
 
   useEffect(() => {
     loadOrSeed().then(setMemory).catch(() => setFailed(true))
@@ -58,15 +34,7 @@ function App() {
           <button className={tab === 'call' ? 'on' : ''} onClick={() => setTab('call')}>Call</button>
           <button className={tab === 'memory' ? 'on' : ''} onClick={() => setTab('memory')}>Family memory</button>
         </nav>
-        <InstallButton />
-        <div className="theme" role="group" aria-label="Theme">
-          {(['system', 'light', 'dark'] as const).map((t) => (
-            <button key={t} className={theme === t ? 'on' : ''} aria-pressed={theme === t}
-              onClick={() => { setTheme(t); applyTheme(t) }}>
-              {t === 'system' ? 'Auto' : t === 'light' ? 'Light' : 'Dark'}
-            </button>
-          ))}
-        </div>
+        <SettingsMenu />
       </header>
 
       <main className="page">

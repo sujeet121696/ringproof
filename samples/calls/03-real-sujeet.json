@@ -4,6 +4,7 @@
   "language": "en",
   "expected": {
     "score": "low",
+    "timeline": {"0": ["low"], "2": ["low"], "4": ["low"]},
     "signals": [],
     "claimed_contact": "sujeet",
     "claimed_org": null,

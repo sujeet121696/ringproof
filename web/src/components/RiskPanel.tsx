@@ -18,10 +18,18 @@ export function RiskMeter(props: { risk: RiskResult | null; checking: boolean; l
           <span key={l} className={`seg ${l} ${level === l ? 'on' : ''}`} />
         ))}
       </div>
-      <p className="level">{level ? LEVEL_TEXT[level] : props.live ? 'Listening…' : 'No call yet'}</p>
+      <p className="level" key={level ?? 'none'}>{level ? LEVEL_TEXT[level] : props.live ? 'Listening…' : 'No call yet'}</p>
       {props.risk && <p className="why">{props.risk.rationale}</p>}
+      {props.risk?.backup && <p className="backup-note">{backupNote(props.risk.checked_by)}</p>}
     </section>
   )
+}
+
+// Say plainly when the main model was down, so a rougher answer is never mistaken for the usual one.
+function backupNote(by: string) {
+  return by === 'keyword rules'
+    ? 'The AI check is down, so this is a simple keyword check. Be extra careful.'
+    : `Checked by the backup model (${by}).`
 }
 
 export function Signals(props: { signals: Signal[] }) {

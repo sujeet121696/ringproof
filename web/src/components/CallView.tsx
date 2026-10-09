@@ -3,6 +3,8 @@ import { useCall } from '../useCall'
 import type { FamilyMemory } from '../types'
 import { ActionPanel, OfficialCheck } from './ActionPanel'
 import { CallerCard } from './CallerCard'
+import { CallStatus } from './CallStatus'
+import { FamilyIcon, ListenIcon, ShieldIcon } from './icons'
 import { RiskMeter, Signals } from './RiskPanel'
 import { Transcript } from './Transcript'
 
@@ -25,6 +27,7 @@ export function CallView(props: { memory: FamilyMemory }) {
   }, [])
 
   const live = state.status === 'live'
+  const called = props.memory.user.called || 'you'
 
   return (
     <>
@@ -46,29 +49,46 @@ export function CallView(props: { memory: FamilyMemory }) {
         <button type="submit" className={live ? 'stop' : 'go'} disabled={!sampleId}>
           {live ? 'Stop call' : state.status === 'ended' ? 'Play again' : 'Play call'}
         </button>
-        {state.status === 'ended' && <span className="muted ended">Call ended. Nothing was stored.</span>}
         {state.error && <span className="error">{state.error}</span>}
       </form>
 
       {state.status === 'idle' ? (
         <section className="card empty">
           <h2>Pick a sample call and press Play</h2>
-          <p className="muted">
-            Ringproof listens as the call plays, checks it against what it remembers about the
-            family, and tells {props.memory.user.called || 'you'} exactly what to do if something is wrong.
-          </p>
+          <ol className="steps">
+            <li>
+              <span className="step-icon"><ListenIcon size={22} /></span>
+              <strong>Listens to the call</strong>
+              <span className="muted">Checks it turn by turn as it plays.</span>
+            </li>
+            <li>
+              <span className="step-icon"><FamilyIcon size={22} /></span>
+              <strong>Knows the family</strong>
+              <span className="muted">Compares the caller with what this browser remembers about them.</span>
+            </li>
+            <li>
+              <span className="step-icon"><ShieldIcon size={22} /></span>
+              <strong>Says what to do</strong>
+              <span className="muted">
+                Tells {called} to ask the code word, waits for the real person to confirm, or says hang up and call 1930.
+              </span>
+            </li>
+          </ol>
         </section>
       ) : (
-        <div className="call-grid">
-          <Transcript turns={state.turns} signals={state.signals} userName={props.memory.user.called || 'You'} />
-          <div className="side">
-            <RiskMeter risk={state.risk} checking={state.checking} live={live} />
-            <ActionPanel actions={state.actions} challenge={state.challenge} memory={props.memory} />
-            <CallerCard risk={state.risk} signals={state.signals} withProfile={state.withProfile} memory={props.memory} />
-            <OfficialCheck actions={state.actions} />
-            <Signals signals={state.signals} />
+        <>
+          <CallStatus state={state} />
+          <div className="call-grid">
+            <Transcript turns={state.turns} signals={state.signals} userName={props.memory.user.called || 'You'} live={live} />
+            <div className="side">
+              <RiskMeter risk={state.risk} checking={state.checking} live={live} />
+              <ActionPanel state={state} memory={props.memory} />
+              <CallerCard risk={state.risk} signals={state.signals} withProfile={state.withProfile} memory={props.memory} />
+              <OfficialCheck actions={state.actions} lookup={state.lookup} />
+              <Signals signals={state.signals} />
+            </div>
           </div>
-        </div>
+        </>
       )}
     </>
   )

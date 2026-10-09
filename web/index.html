@@ -5,7 +5,9 @@
     <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/manifest.webmanifest" />
+    <!-- use-credentials: sends the login cookie when the site is behind Cloudflare Access,
+         otherwise the manifest request is redirected to the login page and Install disappears. -->
+    <link rel="manifest" href="/manifest.webmanifest" crossorigin="use-credentials" />
     <meta name="apple-mobile-web-app-title" content="Ringproof" />
     <meta name="theme-color" content="#f6f4fb" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#14161a" media="(prefers-color-scheme: dark)" />

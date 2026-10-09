@@ -5,6 +5,7 @@
   "_tests": "A money ask alone must not trigger an alarm when it matches the person's history and has no pressure or secrecy.",
   "expected": {
     "score": ["low", "medium"],
+    "timeline": {"0": ["low"], "2": ["low", "medium"], "3": ["low", "medium"]},
     "signals": [],
     "claimed_contact": "sujeet",
     "claimed_org": null,

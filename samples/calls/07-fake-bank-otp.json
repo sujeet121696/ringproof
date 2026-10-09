@@ -5,6 +5,7 @@
   "_tests": "Breaks household rule 0 (the bank never asks for an OTP on a call). Same bank name as the genuine call 04.",
   "expected": {
     "score": "high",
+    "timeline": {"0": ["medium", "high"], "2": ["high"], "3": ["high"]},
     "signals": ["impersonation", "urgency", "transfer_ask"],
     "claimed_contact": null,
     "claimed_org": "Gomti Bank",
