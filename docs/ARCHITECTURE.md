@@ -47,8 +47,8 @@ ported to Python rather than copied (`otp.ts` is no longer needed, see §9).
 ringproof/
 ├── app/        backend: FastAPI, call sources, brain, risk engine, policy, tools (lookup, verify, mailer)
 ├── web/        dashboard: React + Vite
-├── asr/        transcription service (Python + NeMo) on a Nebius AI Cloud GPU
-├── samples/    sample calls + cached transcripts
+├── asr/        speech service (Python + NeMo: Parakeet + Sortformer) on a Nebius AI Cloud GPU
+├── samples/    sample call scripts, recordings' transcripts (`transcripts/`), recordings (`audio/`, git-ignored)
 ├── assets/     logo + favicon
 └── docs/
 ```
@@ -57,9 +57,10 @@ ringproof/
 
 | Module | Input | Output |
 |---|---|---|
-| Call source | Sample replay now; upload, telephony or companion later | Stream of transcript segments (one interface for every channel) |
-| Audio ingest | Uploaded or streamed audio | Audio chunks |
-| Transcriber | Audio chunks | Transcript segments with speaker turns |
+| Call source (`app/calls/`) | A sample, an uploaded recording's transcript, or the phone line; companion later | Stream of transcript turns (one interface for every channel) |
+| Speech service (`asr/server.py`, GPU) | Audio, any format | Parakeet text segments with times; Sortformer speaker segments (uploads only) |
+| Transcriber (`app/asr.py`) | Speech service output | Turns: each segment goes to the speaker heard most during it; the first voice is the caller |
+| Phone line (`app/vobiz.py`) | Vobiz audio stream (16 kHz, big-endian L16) | Utterances cut at pauses, transcribed one by one, pushed as caller turns to the waiting dashboard |
 | Family memory (browser) | User edits | Profiles + household rules (CRUD + delete-all) |
 | Risk engine | Transcript window + contact names + claimed caller's profile | `{ score, signals[], rationale, claimed_contact, claimed_org }` |
 | Lookup | `claimed_org` | `{ official_helpline, warnings[], sources[] }` |
@@ -78,10 +79,14 @@ serve several hostnames. Not yet added: a Content Security Policy (needs testing
 
 A Nebius GPU costs about $1–3/hour, too much to keep running for weeks of judging on $50 credit.
 
-- Each sample call is transcribed **once** and the transcript is saved in `samples/`.
+- Each recorded sample is transcribed **once** (`python -m scripts.transcribe_samples`) into
+  `samples/transcripts/`; the dashboard plays it instead of the script. The scripts stay the
+  ground truth for the eval scripts, whose expected levels refer to the script's own turns.
 - The demo URL **replays** saved transcripts line by line at call speed, so it looks live.
 - Nemotron, Tavily, memory and the challenge still run **for real** on every demo.
-- The GPU is switched on only to transcribe new uploads and to record the demo video.
+- The GPU is switched on only to transcribe new uploads, take phone calls and record the demo
+  video. It is reached through an SSH tunnel and a token, never opened to the internet
+  (`asr/README.md`).
 
 ## 5. Provider fallback
 
@@ -187,7 +192,7 @@ choices keep it from needing a rewrite later:
 
 | Choice | Hackathon | Later |
 |---|---|---|
-| **Call source interface** | Replay of sample transcripts | Guardian Line (Vobiz WebSocket stream), 3-way call, companion listener plug into the same interface |
+| **Call source interface** | Sample replay, uploaded recordings, and a listen-only Vobiz call-in line | Guardian Line that screens and connects calls, 3-way call, companion listener plug into the same interface |
 | **Call session over WebSocket** | Dashboard receives transcript, risk and action events live | Same event stream for phones and guardian apps |
 | **Policy is code, the model only assesses** | A small rules table: signals + caller type → action | Same table, tested and auditable at scale |
 | **Actions are tools** | Code word, "Is this you?" check, lookup, email alert | Add callback, WhatsApp, scam report without touching the engine |
@@ -200,8 +205,9 @@ Reference client: `scripts/ws_replay.py`.
 
 | Direction | `type` | Fields | When |
 |---|---|---|---|
-| browser → server | `start` | `sample_id`, `speed`, `contacts[]` (id, name, relation), `household_rules[]`, `alert_contact`, `alert_email`, `user_called` | First message |
-| server → browser | `started` | `sample`, `duration` | Call begins |
+| browser → server | `start` | One source: `sample_id`, or `turns[]` + `title` (an uploaded recording, ≤300 turns), or `phone: true`; plus `speed`, `contacts[]` (id, name, relation), `household_rules[]`, `alert_contact`, `alert_email`, `user_called` | First message |
+| server → browser | `waiting` | `number` | Phone line: waiting for a call (one screen at a time, up to 10 minutes) |
+| server → browser | `started` | `sample` (`id`, `title`), `duration` (0 for a phone call) | Call begins |
 | server → browser | `turn` | `index`, `turn` (`t`, `speaker`, `text`) | Each transcript line, at call speed |
 | server → browser | `risk` | `upto`, `ms`, `with_profile`, `result` (RiskResult) | After caller turns; runs in the background |
 | server → browser | `need_profile` | `contact` | The model named a family contact |

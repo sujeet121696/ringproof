@@ -2,7 +2,8 @@ import { mmss } from '../format'
 import type { CallState } from '../useCall'
 
 // Live / ended, which call, and how far through it is, by the latest line's time in the call. A call
-// played to the end reaches 100% by itself; a stopped one shows where it stopped.
+// played to the end reaches 100% by itself; a stopped one shows where it stopped. A phone call's
+// length isn't known (duration 0), so it shows only the time so far.
 export function CallStatus(props: { state: CallState }) {
   const { status, title, duration, turns } = props.state
   const at = turns.at(-1)?.t ?? 0
@@ -16,11 +17,13 @@ export function CallStatus(props: { state: CallState }) {
         <strong>{live ? 'Live call' : 'Call ended'}</strong>
         <span className="muted">{live ? title : `${title} · nothing was stored`}</span>
       </div>
-      <div className="progress" role="progressbar" aria-label="Call progress"
-        aria-valuemin={0} aria-valuemax={Math.round(duration)} aria-valuenow={Math.round(at)}>
-        <span style={{ width: `${pct}%` }} />
-      </div>
-      <span className="clock">{mmss(at)} / {mmss(duration)}</span>
+      {duration > 0 && (
+        <div className="progress" role="progressbar" aria-label="Call progress"
+          aria-valuemin={0} aria-valuemax={Math.round(duration)} aria-valuenow={Math.round(at)}>
+          <span style={{ width: `${pct}%` }} />
+        </div>
+      )}
+      <span className="clock">{duration > 0 ? `${mmss(at)} / ${mmss(duration)}` : mmss(at)}</span>
     </section>
   )
 }

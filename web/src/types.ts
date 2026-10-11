@@ -42,6 +42,7 @@ export type Lookup = OrgCheck & { ok: boolean }
 export type Notified = { ok: boolean; reason: string | null }
 
 export type CallEvent =
+  | { type: 'waiting'; number: string } // phone line: waiting for someone to call
   | { type: 'started'; sample: { id: string; title: string }; duration: number }
   | { type: 'turn'; index: number; turn: Turn }
   | { type: 'risk'; upto: number; ms: number; with_profile: boolean; result: RiskResult }

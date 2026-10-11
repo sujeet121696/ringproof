@@ -29,5 +29,14 @@ class Settings(BaseSettings):
     # Live calls at once (each one runs model checks on our credits).
     max_live_calls: int = 3
 
+    # Speech service on the Nebius GPU (asr/server.py): Parakeet + Sortformer. Empty = off.
+    asr_url: str = ""
+    asr_token: str = ""
+    asr_timeout_s: float = 120.0
+
+    # Vobiz phone line. Empty secret = the line is off (its routes answer 404).
+    vobiz_secret: str = ""
+    vobiz_number: str = ""  # shown on the dashboard while it waits for a call
+
 
 settings = Settings()

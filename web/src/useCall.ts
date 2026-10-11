@@ -5,8 +5,12 @@ import type { Action, ActionKind, CallEvent, FamilyMemory, Lookup, Notified, Ris
 export type ChallengeStatus = 'waiting' | 'passed' | 'failed'
 export type Challenge = { target: string; status: ChallengeStatus }
 
+// What to play: a sample, an uploaded recording's transcript, or the next call to the phone line.
+export type CallSource = { sample_id: string } | { turns: Turn[]; title: string } | { phone: true }
+
 export type CallState = {
-  status: 'idle' | 'live' | 'ended'
+  status: 'idle' | 'waiting' | 'live' | 'ended'
+  number: string // the phone number to call, while waiting
   title: string
   duration: number
   turns: Turn[]
@@ -24,6 +28,7 @@ export type CallState = {
 
 const IDLE: CallState = {
   status: 'idle',
+  number: '',
   title: '',
   duration: 0,
   turns: [],
@@ -85,6 +90,8 @@ export function useCall(memory: FamilyMemory | null) {
 
     setState((s) => {
       switch (ev.type) {
+        case 'waiting':
+          return { ...IDLE, status: 'waiting', number: ev.number }
         case 'started':
           return { ...IDLE, status: 'live', title: ev.sample.title, duration: ev.duration }
         case 'turn':
@@ -124,7 +131,7 @@ export function useCall(memory: FamilyMemory | null) {
     })
   }
 
-  const start = useCallback((sampleId: string, speed: number) => {
+  const start = useCallback((source: CallSource, speed: number) => {
     const mem = memoryRef.current
     if (!mem) return
     ws.current?.close()
@@ -138,7 +145,7 @@ export function useCall(memory: FamilyMemory | null) {
       socket.send(
         JSON.stringify({
           type: 'start',
-          sample_id: sampleId,
+          ...source,
           speed,
           // Names and relations only; a profile follows only if the caller claims to be them.
           contacts: mem.contacts.map(({ id, name, relation }) => ({ id, name, relation })),
@@ -168,7 +175,7 @@ export function useCall(memory: FamilyMemory | null) {
       if (ws.current !== socket || e.code === 1000) return
       setState((s) => ({
         ...s,
-        status: s.status === 'live' ? 'ended' : s.status,
+        status: s.status === 'live' ? 'ended' : s.status === 'waiting' ? 'idle' : s.status,
         checking: false,
         error: e.reason || 'Lost connection to Ringproof.',
       }))
@@ -180,7 +187,7 @@ export function useCall(memory: FamilyMemory | null) {
   const stop = useCallback(() => {
     ws.current?.close()
     ws.current = null
-    setState((s) => ({ ...s, status: 'ended', checking: false }))
+    setState((s) => (s.status === 'waiting' ? IDLE : { ...s, status: 'ended', checking: false }))
   }, [])
 
   useEffect(() => () => ws.current?.close(), [])
