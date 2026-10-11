@@ -53,8 +53,13 @@
 
 ## Week 2 · Oct 5 – 11 · Core pipeline → M2
 10. [ ] Audio ingest: upload a file and split it into chunks
+    - [x] Oct 10: `POST /api/transcribe` (≤20 MB, not kept) + "Call from: Recording" on the
+      dashboard; tested with a stand-in speech service. Real run: needs the GPU
 11. [ ] Transcriber module with speaker turns; save each sample's transcript to `samples/`
     (English; plus Hindi/Hinglish route if the go/no-go passed)
+    - [x] Oct 10: `asr/server.py` (Parakeet + Sortformer, code as on the model cards),
+      `app/asr.py` (segments -> turns, first voice = caller), `scripts/transcribe_samples.py`
+    - [ ] First GPU run: check Sortformer's printed format and the speaker split on real audio
 12. [x] Family memory in the browser (IndexedDB): profiles + household rules, CRUD + delete-all
     - [x] Oct 7: IndexedDB store, seeded once from `/api/seed/family` (`web/src/memory.ts`)
     - [x] Oct 8: edit, delete, delete-all (with step 22)
@@ -150,11 +155,16 @@
 30a. [ ] **Stretch, only if M3 is done by Oct 18:** a live call through a Vobiz number
     (Vobiz call source → Parakeet on GPU → same agent), recorded for the demo video only.
     Listen-only; the agent talking back stays post-hackathon (VISION §3a)
+    - [x] Oct 10: `app/vobiz.py` + `/vobiz/answer|stream/{secret}` + "Call from: Phone line";
+      tested with a fake Vobiz stream. Real call: needs the GPU, `.env` values, the Answer URL
+      in Vobiz, and a Cloudflare Access bypass for `/vobiz/*`; then tune the pause thresholds
 
 ## Week 5 · Oct 26 – 29 · Submission → M5
 31. [ ] README: differentiation story (family memory + personal challenge + Tavily lookup),
-    screenshots, setup steps
-32. [ ] Write the required feedback on Nebius + NVIDIA tools 
+    screenshots, setup steps (Oct 9: problem figures, comparison table and Sources section added,
+    each fact checked against its source; screenshots still to do)
+32. [ ] Write the required feedback on Nebius + NVIDIA tools (Oct 9: draft in `docs/FEEDBACK.md`;
+    Parakeet, GPU and VM parts pending) 
     (specific and honest; $100 feedback prizes)
 33. [ ] Record the demo video (**≤3 min**, with voiceover on Nebius + NVIDIA usage) following the PRD
     demo story: digital-arrest call caught, fake Sujeet fails the code word, real Sujeet's call stays quiet

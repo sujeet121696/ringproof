@@ -9,3 +9,6 @@ __pycache__/
 # Node
 node_modules/
 dist/
+
+# Call recordings stay local (only their transcripts are committed)
+samples/audio/

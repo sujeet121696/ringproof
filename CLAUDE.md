@@ -25,6 +25,7 @@ triggers a personal verification challenge (family code word) and a trusted-cont
 | [docs/DESIGN.md](docs/DESIGN.md) | Dashboard UI/UX direction |
 | [docs/TASKS.md](docs/TASKS.md) | Build checklist and progress |
 | [docs/VISION.md](docs/VISION.md) | Post-hackathon: guardian agent, channels, privacy, scaling |
+| [docs/FEEDBACK.md](docs/FEEDBACK.md) | Draft feedback on Nebius, NVIDIA models and Tavily (for Devpost) |
 
 ## Working agreements
 

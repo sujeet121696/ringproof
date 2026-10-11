@@ -20,5 +20,6 @@ their consent); every other detail, including the code word, is made up. The ban
 **Call format.** `turns[]` has `t` (seconds from call start, used for replay at call speed),
 `speaker` (`caller` or `user`) and `text`. `expected` is the ground truth for
 `python -m scripts.eval_samples`; `score` may list several acceptable levels. `_tests` says what
-edge case a call checks. Once audio is recorded and transcribed, the cached transcript replaces
-`turns` with the same shape.
+edge case a call checks. Recordings go in `audio/<id>.wav` (or mp3/m4a/ogg/flac; git-ignored, start
+with the caller). `python -m scripts.transcribe_samples` writes `transcripts/<id>.json` with the
+same `turns` shape, and the dashboard plays that instead of the script.
