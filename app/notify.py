@@ -90,6 +90,14 @@ def get_notifier() -> Notifier:
 
 # --- Messages ---------------------------------------------------------------------------------
 # Plain words, no transcript: the alert says who the caller claimed to be and why it looks wrong.
+# Each email ends by saying why it came and how to stop it (the recipient never signed up).
+
+
+def why_footer(user: str) -> str:
+    return (
+        f"\n\n--\nYou got this because {user} added you as a trusted contact in Ringproof, which guards "
+        f"their phone calls. To stop these emails, ask {user} to remove you there."
+    )
 
 
 def alert_message(user: str, claim: str, why: str) -> tuple[str, str]:
@@ -101,6 +109,7 @@ def alert_message(user: str, claim: str, why: str) -> tuple[str, str]:
         f"Ringproof is showing {user} a warning not to send money or share any OTP. "
         f"Please call {user} on their usual number.\n\n"
         "If you are worried, the National Cyber Crime Helpline is 1930 (cybercrime.gov.in)."
+        + why_footer(user)
     )
     return subject, body
 
@@ -112,5 +121,6 @@ def is_this_you_message(user: str, name: str, link: str) -> tuple[str, str]:
         f"Someone is on the phone with {user} right now saying they are you.\n"
         f"Please tell Ringproof if it is really you:\n\n{link}\n\n"
         f"If it is not you, please call {user} on their usual number."
+        + why_footer(user)
     )
     return subject, body

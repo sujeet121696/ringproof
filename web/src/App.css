@@ -53,6 +53,11 @@
 .segmented button.on { background: var(--fg); color: var(--bg); }
 .menu-item { width: 100%; justify-content: flex-start; color: var(--fg); border: 1px solid var(--line); }
 .menu-item:hover, .segmented button:not(.on):hover { color: var(--fg); background: color-mix(in srgb, var(--fg) 8%, transparent); }
+/* Icon-only theme switch: the chosen one gets a soft accent tint, the others are split by hairlines. */
+.segmented.icons { gap: 0; padding: 0; overflow: hidden; }
+.segmented.icons button { padding: 9px 0; border-radius: 0; color: var(--fg); }
+.segmented.icons button + button { border-left: 1px solid var(--line); }
+.segmented.icons button.on { background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--fg); }
 .settings-panel .hint { margin: 8px 0 0; font-size: 0.85rem; }
 
 .page { max-width: 1240px; margin: 0 auto; padding: 20px 16px 48px; }
@@ -260,6 +265,13 @@
 .memory-view .small { font-size: 0.85rem; margin-top: -4px; }
 .privacy { background: var(--note-bg); }
 .privacy p { margin: 0; }
+.legal ul { margin: 0; padding-left: 20px; }
+.legal li + li { margin-top: 6px; }
+.legal p { margin: 8px 0 0; }
+.legal h2 + p { margin-top: 0; }
+.site-foot { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; padding: 0 16px 32px; font-size: 0.85rem; color: var(--muted); }
+.site-foot a, .site-foot .link { color: var(--muted); background: none; border: 0; padding: 0; font: inherit; text-decoration: underline; cursor: pointer; }
+.site-foot a:hover, .site-foot .link:hover { color: var(--fg); }
 .card-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
 .field-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 12px; }
 .btn {

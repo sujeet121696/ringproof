@@ -50,9 +50,10 @@ export function MemoryView(props: { memory: FamilyMemory; onChange: (m: FamilyMe
       <section className="card privacy">
         <h2>Family memory</h2>
         <p>
-          Stored <strong>only in this browser</strong>. During a call, Ringproof shares just the profile of the
-          person the caller claims to be, and only whether they have a code word. <strong>The code word never
-          leaves this device.</strong>
+          Stored <strong>only in this browser</strong>. During a call, Ringproof shares your contacts' names and
+          relations, your household rules and the alert contact's email, plus the full profile of only the person
+          the caller claims to be. <strong>The code word never leaves this device.</strong> Details
+          in <em>Privacy and terms</em> at the bottom of the page.
         </p>
       </section>
 

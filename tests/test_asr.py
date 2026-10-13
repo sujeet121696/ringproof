@@ -39,6 +39,7 @@ def test_uncovered_segments_keep_the_current_speaker_and_no_speaker_data_means_c
 @pytest.fixture
 def client(monkeypatch):
     monkeypatch.setattr(settings, "provider", "mock")
+    monkeypatch.setattr(main, "_uploads", {})  # each test starts with no uploads counted
     return TestClient(main.app)
 
 
@@ -63,3 +64,14 @@ def test_upload_size_is_bounded(client, monkeypatch):
     monkeypatch.setattr(asr, "MAX_AUDIO_BYTES", 4)
     assert client.post("/api/transcribe", content=b"12345").status_code == 413
     assert client.post("/api/transcribe", content=b"").status_code == 400
+
+
+def test_uploads_per_visitor_are_limited(client, monkeypatch):
+    async def fake(audio, diarize):
+        return {"segments": [seg(0, 1, "Hello")], "speakers": []}
+
+    monkeypatch.setattr(asr, "transcribe", fake)
+    monkeypatch.setattr(settings, "uploads_per_hour", 2)
+    me, other = {"cf-connecting-ip": "203.0.113.1"}, {"cf-connecting-ip": "203.0.113.2"}
+    assert [client.post("/api/transcribe", content=b"a", headers=me).status_code for _ in range(3)] == [200, 200, 429]
+    assert client.post("/api/transcribe", content=b"a", headers=other).status_code == 200

@@ -13,12 +13,34 @@ from starlette.types import Scope
 
 DIST = Path(__file__).resolve().parent.parent / "web" / "dist"
 
-# Safe for every response: they only stop old browser behaviours (MIME sniffing, framing, leaking
-# the full URL, with the "Is this you?" token, to other sites).
+# Content Security Policy: everything comes from this site (no CDNs, analytics or outside fonts),
+# so the browser refuses any script, style or connection injected from elsewhere. Inline styles are
+# allowed for the "Is this you?" page (app/main.py). Adding a third party means adding it here and
+# on the privacy page (docs/RULES.md §5).
+CSP = "; ".join([
+    "default-src 'self'",
+    "script-src 'self'",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data:",
+    "font-src 'self'",
+    "connect-src 'self'",
+    "manifest-src 'self'",
+    "worker-src 'self'",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'",
+])
+
+# Safe for every response: they stop old browser behaviours (MIME sniffing, framing, leaking the
+# full URL, with the "Is this you?" token, to other sites) and keep the site on HTTPS. HSTS is
+# ignored over plain http (localhost), and leaves out other kharidwise.com subdomains.
 SECURITY_HEADERS = {
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "DENY",
     "Referrer-Policy": "same-origin",
+    "Content-Security-Policy": CSP,
+    "Strict-Transport-Security": "max-age=15552000",
 }
 
 
