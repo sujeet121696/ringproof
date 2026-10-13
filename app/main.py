@@ -1,7 +1,9 @@
 import asyncio
 import contextlib
 import json
+import time
 from typing import Literal
+from urllib.parse import urlparse
 
 from fastapi import FastAPI, HTTPException, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse, Response
@@ -26,6 +28,35 @@ _live_calls = 0
 PHONE_WAIT_S = 600
 
 app = FastAPI(title="Ringproof")
+
+
+def origin_ok(origin: str | None) -> bool:
+    """Only our own pages may start a call. Browsers always send Origin on a WebSocket, so this
+    stops another website from running calls on our model credits from its visitors' browsers.
+    Scripts (scripts/ws_replay.py) send none and pass; they could fake one anyway, which is why
+    the call cap and the email allow-list stay."""
+    if not origin:
+        return True
+    own = urlparse(settings.public_base_url)
+    seen = urlparse(origin)
+    return (seen.scheme, seen.netloc) == (own.scheme, own.netloc) or seen.hostname in ("localhost", "127.0.0.1")
+
+
+# Uploads per visitor in the last hour (one server process). The visitor is Cloudflare's
+# CF-Connecting-IP: uvicorn listens on 127.0.0.1, so only the tunnel can reach it and set that header.
+_uploads: dict[str, list[float]] = {}
+
+
+def upload_allowed(request: Request) -> bool:
+    who = request.headers.get("cf-connecting-ip") or (request.client.host if request.client else "")
+    now = time.monotonic()
+    for key in [k for k, times in _uploads.items() if now - times[-1] > 3600]:
+        del _uploads[key]  # forget visitors with nothing in the last hour
+    recent = [t for t in _uploads.get(who, []) if now - t < 3600]
+    if len(recent) >= settings.uploads_per_hour:
+        return False
+    _uploads[who] = [*recent, now]
+    return True
 
 
 @app.middleware("http")
@@ -112,6 +143,8 @@ async def transcribe(request: Request) -> dict:
         raise HTTPException(400, "No audio was sent.")
     if len(audio) > asr.MAX_AUDIO_BYTES:
         raise too_big
+    if not upload_allowed(request):
+        raise HTTPException(429, "Too many recordings in the last hour. Please try again later.")
     try:
         result = await asr.transcribe(audio, diarize=True)
     except asr.AsrError as err:
@@ -178,6 +211,9 @@ async def call(ws: WebSocket) -> None:
     """Run one call live: a sample, an uploaded recording, or the phone line. Protocol:
     ARCHITECTURE §11."""
     global _live_calls
+    if not origin_ok(ws.headers.get("origin")):
+        await ws.close(code=1008)  # refused before the handshake: the browser sees a 403
+        return
     await ws.accept()
     try:
         start = StartCall.model_validate(await ws.receive_json())

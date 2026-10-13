@@ -133,6 +133,13 @@
     `localhost` in Chrome: worker active, app files cached, Install button shown. Needs HTTPS, so the
     real phone test comes after the deploy (28). Oct 9: installed on Sujeet's phone from
     https://ringproof.kharidwise.com behind Cloudflare Access (reported by Sujeet: working)
+26b. [x] Compliance pass, Oct 13: Privacy and terms page + footer (no cookies, analytics or
+    third-party fonts; data flows listed per service), in-app memory note made complete, and every
+    email says why it came and how to stop it. Not done: Lighthouse/axe accessibility run
+26c. [x] Security pass, Oct 13: `/ws/call` origin check, uploads per visitor per hour, CSP + HSTS,
+    pinned Python deps (`requirements.lock`), `pip-audit` + `npm audit` clean; `npm run local` /
+    `npm run check` (one command: clean, lint, build, tests, audit, serve). Checked in Chrome:
+    page, a full call and the privacy page work under the CSP
 27. [x] Lock the logo font (convert text to fixed shapes) and add PNG/ICO favicon fallbacks
     (Oct 7: redesigned in the kharidwise style; full icon set + manifest; `assets/build/`)
 28. [ ] Deploy to a public **demo URL** (required)

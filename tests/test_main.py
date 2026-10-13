@@ -82,3 +82,22 @@ def test_dashboard_caching_hashed_assets_long_everything_else_rechecked():
     for path in ("/", "/sw.js"):
         assert client.get(path).headers["cache-control"] == "no-cache"
     assert client.get("/api/health").headers["x-frame-options"] == "DENY"
+
+
+def test_another_website_cannot_start_a_call(client, monkeypatch):
+    monkeypatch.setattr(settings, "public_base_url", "https://ringproof.kharidwise.com")
+    with pytest.raises(WebSocketDisconnect):
+        with client.websocket_connect("/ws/call", headers={"origin": "https://evil.example"}):
+            pass
+    for origin in ("https://ringproof.kharidwise.com", "http://localhost:5180"):
+        with client.websocket_connect("/ws/call", headers={"origin": origin}) as ws:
+            ws.send_json(START)
+            while ws.receive_json()["type"] != "end":
+                pass
+
+
+def test_responses_carry_the_security_headers(client):
+    headers = client.get("/api/health").headers
+    assert "default-src 'self'" in headers["content-security-policy"]
+    assert "frame-ancestors 'none'" in headers["content-security-policy"]
+    assert headers["strict-transport-security"].startswith("max-age=")

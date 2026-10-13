@@ -28,6 +28,8 @@ class Settings(BaseSettings):
 
     # Live calls at once (each one runs model checks on our credits).
     max_live_calls: int = 3
+    # Recordings one visitor may upload per hour (each one runs on the GPU).
+    uploads_per_hour: int = 10
 
     # Speech service on the Nebius GPU (asr/server.py): Parakeet + Sortformer. Empty = off.
     asr_url: str = ""

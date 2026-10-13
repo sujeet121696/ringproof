@@ -68,10 +68,10 @@ ringproof/
 | Action layer (tools) | Policy decision + profile + lookup | Personal challenge, "Is this you?" check, helpline, trusted-contact alert |
 | Dashboard | All of the above | Live transcript, risk meter, signals, actions, memory view |
 | App shell (`web/public/sw.js`) | Browser | Makes it installable on phones; caches only the app files, never `/api`, `/ws` or memory |
-| Production serving (`app/web.py`) | `web/dist` (built) | One process, one port: the API also serves the dashboard; hashed `assets/` cached a year, everything else re-checked; safe security headers on every response |
+| Production serving (`app/web.py`) | `web/dist` (built) | One process, one port: the API also serves the dashboard; hashed `assets/` cached a year, everything else re-checked; security headers on every response (CSP: only this site's own scripts, styles and connections; HSTS) |
 
 **Production run** (Oct 9): `cd web && npm run build`, then from the repo root
-`PUBLIC_BASE_URL=https://ringproof.kharidwise.com uvicorn app.main:app --port 8200` (no `--reload`).
+`PUBLIC_BASE_URL=https://ringproof.kharidwise.com uvicorn app.main:app --port 8200` (no `--reload`). Locally, `npm run local` builds and serves the same way on 8300.
 A Cloudflare Tunnel maps `ringproof.kharidwise.com` to `http://localhost:8200`; one tunnel can
 serve several hostnames. Not yet added: a Content Security Policy (needs testing on every page).
 

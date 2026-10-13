@@ -21,10 +21,11 @@ export const GearIcon = (p: Props) => (
   </Icon>
 )
 
+// Half light, half dark: follow the device.
 export const AutoIcon = (p: Props) => (
   <Icon {...p}>
-    <rect x="3" y="4" width="18" height="12" rx="2" />
-    <path d="M8 20h8M12 16v4" />
+    <circle cx="12" cy="12" r="8.5" />
+    <path d="M12 3.5a8.5 8.5 0 0 0 0 17Z" fill="currentColor" />
   </Icon>
 )
 

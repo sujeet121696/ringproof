@@ -93,7 +93,7 @@ an icon set.
 
 - Header: logo mark + text wordmark ("Ring" + "proof" in `--accent-green`), so it follows the app's
   light/dark choice; tabs Call / Family memory; a gear button on the right opens Settings
-  (`SettingsMenu.tsx`): Theme (Auto / Light / Dark, each with an icon) and App (Install). New
+  (`SettingsMenu.tsx`): Theme (icon-only switch: half circle = Auto, sun = Light, moon = Dark; names in the tooltip and for screen readers) and App (Install). New
   settings are added there as their own section, so the header stays the same. Icons are
   original line drawings in `components/icons.tsx` (no icon library).
 - Call view: sample picker, speed, Play. Transcript left (caller lines with a red edge and signal
@@ -114,6 +114,9 @@ an icon set.
   rules (add/remove), who to alert, and Your data (Delete all memory with an inline confirm, Load
   demo family). Every edit saves to IndexedDB at once. Delete-all is one overwrite with an empty
   record, so a reload can't bring the demo family back.
+- Privacy and terms (Oct 13): footer link on every view opens `PrivacyView.tsx`: what stays on the
+  device, what is sent to whom (server, Nebius, Tavily, email, speech service, Vobiz, Cloudflare),
+  how to delete, and short demo terms. Keep it true to the code when data flows change.
 - Install (Oct 8): "Install on this device" in Settings, shown only when the browser can install
   (Chrome/Edge/Android) or on iPhone (tap shows "Share → Add to Home Screen"); hidden once
   installed. Opens full-screen without browser bars (`display: standalone`).

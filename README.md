@@ -50,20 +50,28 @@ Demo scope: sample calls through a dashboard, not live telephony interception (a
 
 ## Run locally
 
-Needs Python 3.12 and Node 20+. Windows commands shown; on macOS/Linux use `.venv/bin/` and `cp`.
+Needs Python 3.12 and Node 20.11+. Windows commands shown; on macOS/Linux use `.venv/bin/` and `cp`.
 
 **One-time setup**
 
 ```bash
 py -3.12 -m venv .venv
-.venv\Scripts\python -m pip install -r requirements.txt
+.venv\Scripts\python -m pip install -r requirements.txt -c requirements.lock
 cd web && npm install && cd ..
 copy .env.example .env      # then fill in NEBIUS_API_KEY and TAVILY_API_KEY
 ```
 
 No keys yet? Set `PROVIDER=mock` in `.env` to run with deterministic rules and no API calls.
 
-**Run** (two terminals)
+**One command: check, clean, build and run** (production-style, http://localhost:8300)
+
+```bash
+npm run local              # setup check, clean, lint + build, tests, security audit, then serve
+npm run local -- --mock    # same, with PROVIDER=mock (no model credits)
+npm run check              # everything except serving: run it before every commit
+```
+
+**Develop with live reload** (two terminals)
 
 ```bash
 # 1. Backend: http://localhost:8100 (API docs at /docs)

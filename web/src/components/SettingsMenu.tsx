@@ -65,11 +65,11 @@ export function SettingsMenu() {
         <div id={panelId} className="settings-panel" role="group" aria-label="Settings">
           <section>
             <h3>Theme</h3>
-            <div className="segmented" role="group" aria-label="Theme">
+            <div className="segmented icons" role="group" aria-label="Theme">
               {THEMES.map(({ id, label, Icon }) => (
                 <button key={id} className={theme === id ? 'on' : ''} aria-pressed={theme === id}
-                  onClick={() => chooseTheme(id)}>
-                  <Icon size={16} /> {label}
+                  aria-label={label} title={label} onClick={() => chooseTheme(id)}>
+                  <Icon size={20} />
                 </button>
               ))}
             </div>
