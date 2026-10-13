@@ -4,12 +4,17 @@
 //   npm run local              everything, then serve on http://localhost:8300
 //   npm run local -- --mock    same, with PROVIDER=mock (keyword rules, no model credits)
 //   npm run check              everything except serving (for before a commit)
+//   npm run local:tunnel       everything, then serve the public demo: port 8200 behind the
+//                              Cloudflare Tunnel, links in emails to https://ringproof.kharidwise.com
 //
 // Port 8300 stays clear of dev (8100 + 5180) and the tunnel's server (8200). PORT=... changes it.
+// The tunnel (cloudflared) serves other sites too, so it is started only if it isn't running, and
+// left running when Ringproof stops. TUNNEL_CONFIG=... picks another config file.
 // Any failing step stops the run, so the app only starts when every check has passed.
 
-import { spawnSync } from 'node:child_process'
+import { spawn, spawnSync } from 'node:child_process'
 import { existsSync, rmSync } from 'node:fs'
+import { homedir } from 'node:os'
 import { join } from 'node:path'
 
 const root = join(import.meta.dirname, '..')
@@ -19,7 +24,10 @@ const python = join(root, '.venv', win ? 'Scripts/python.exe' : 'bin/python')
 const args = process.argv.slice(2)
 const checkOnly = args.includes('--check-only')
 const mock = args.includes('--mock')
-const port = process.env.PORT ?? '8300'
+const tunnel = args.includes('--tunnel')
+const port = process.env.PORT ?? (tunnel ? '8200' : '8300')
+const publicUrl = 'https://ringproof.kharidwise.com'
+const tunnelConfig = process.env.TUNNEL_CONFIG ?? join(homedir(), '.cloudflared', 'claimtoglow.yml')
 
 function step(title) {
   console.log(`\n\x1b[1m▶ ${title}\x1b[0m`)
@@ -32,6 +40,13 @@ function run(cmd, cmdArgs, opts = {}) {
     console.error(`\n\x1b[31m✗ Failed: ${cmd} ${cmdArgs.join(' ')}\x1b[0m`)
     process.exit(res.status ?? 1)
   }
+}
+
+function tunnelRunning() {
+  const res = win
+    ? spawnSync('tasklist', ['/FI', 'IMAGENAME eq cloudflared.exe', '/NH'], { encoding: 'utf8' })
+    : spawnSync('pgrep', ['-x', 'cloudflared'], { encoding: 'utf8' })
+  return (res.stdout ?? '').includes('cloudflared')
 }
 
 function hasModule(name) {
@@ -71,7 +86,24 @@ if (checkOnly) {
   process.exit(0)
 }
 
-step(`Run on http://localhost:${port}${mock ? ' (PROVIDER=mock)' : ''}   Ctrl+C to stop`)
+if (tunnel) {
+  step('Cloudflare Tunnel')
+  if (tunnelRunning()) console.log('already running')
+  else if (!existsSync(tunnelConfig)) console.warn(`No tunnel config at ${tunnelConfig}; serving locally only.`)
+  else {
+    // Detached, so it keeps serving the other sites on this tunnel after Ringproof stops.
+    spawn('cloudflared', ['--config', tunnelConfig, 'tunnel', 'run'], { detached: true, stdio: 'ignore' }).unref()
+    console.log(`started with ${tunnelConfig}`)
+  }
+}
+
+const where = tunnel ? `${publicUrl} (via http://localhost:${port})` : `http://localhost:${port}`
+step(`Run on ${where}${mock ? ' (PROVIDER=mock)' : ''}   Ctrl+C to stop`)
 run(python, ['-m', 'uvicorn', 'app.main:app', '--port', port], {
-  env: { ...process.env, ...(mock ? { PROVIDER: 'mock' } : {}) },
+  env: {
+    ...process.env,
+    ...(mock ? { PROVIDER: 'mock' } : {}),
+    // Links in emails and the /ws/call origin check must match the public address.
+    ...(tunnel ? { PUBLIC_BASE_URL: publicUrl } : {}),
+  },
 })

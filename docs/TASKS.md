@@ -138,7 +138,8 @@
     email says why it came and how to stop it. Not done: Lighthouse/axe accessibility run
 26c. [x] Security pass, Oct 13: `/ws/call` origin check, uploads per visitor per hour, CSP + HSTS,
     pinned Python deps (`requirements.lock`), `pip-audit` + `npm audit` clean; `npm run local` /
-    `npm run check` (one command: clean, lint, build, tests, audit, serve). Checked in Chrome:
+    `npm run check` (one command: clean, lint, build, tests, audit, serve); `npm run local:tunnel`
+    serves the public demo on 8200 with the public URL and starts cloudflared if needed. Checked in Chrome:
     page, a full call and the privacy page work under the CSP
 27. [x] Lock the logo font (convert text to fixed shapes) and add PNG/ICO favicon fallbacks
     (Oct 7: redesigned in the kharidwise style; full icon set + manifest; `assets/build/`)

@@ -69,6 +69,8 @@ No keys yet? Set `PROVIDER=mock` in `.env` to run with deterministic rules and n
 npm run local              # setup check, clean, lint + build, tests, security audit, then serve
 npm run local -- --mock    # same, with PROVIDER=mock (no model credits)
 npm run check              # everything except serving: run it before every commit
+npm run local:tunnel       # same checks, then serve the public demo (port 8200 behind the
+                           # Cloudflare Tunnel; starts cloudflared if it isn't running)
 ```
 
 **Develop with live reload** (two terminals)

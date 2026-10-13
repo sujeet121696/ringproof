@@ -4,6 +4,7 @@
   "description": "Repo-level commands. The dashboard's own package is in web/.",
   "scripts": {
     "local": "node scripts/local.mjs",
+    "local:tunnel": "node scripts/local.mjs --tunnel",
     "check": "node scripts/local.mjs --check-only"
   }
 }
