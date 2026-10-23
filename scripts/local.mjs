@@ -14,6 +14,7 @@
 
 import { spawn, spawnSync } from 'node:child_process'
 import { existsSync, rmSync } from 'node:fs'
+import { createServer } from 'node:net'
 import { homedir } from 'node:os'
 import { join } from 'node:path'
 
@@ -53,7 +54,26 @@ function hasModule(name) {
   return spawnSync(python, ['-c', `import ${name}`], { cwd: root }).status === 0
 }
 
+// A server left over from an earlier run would keep answering on the port with an old build.
+async function portFree(p) {
+  return new Promise((done) => {
+    const probe = createServer().once('error', () => done(false))
+    probe.listen(Number(p), '127.0.0.1', () => probe.close(() => done(true)))
+  })
+}
+
+function portOwner(p) {
+  if (!win) return spawnSync('lsof', ['-nP', `-iTCP:${p}`, '-sTCP:LISTEN'], { encoding: 'utf8' }).stdout?.trim() ?? ''
+  const pid = spawnSync('netstat', ['-ano', '-p', 'TCP'], { encoding: 'utf8' }).stdout
+    ?.split('\n').find((l) => l.includes(`:${p} `) && l.includes('LISTENING'))?.trim().split(/\s+/).pop()
+  return pid ? `PID ${pid} (stop it with: taskkill /PID ${pid} /T /F)` : ''
+}
+
 step('Setup')
+if (!checkOnly && !(await portFree(port))) {
+  console.error(`Port ${port} is already in use, probably by an earlier Ringproof run. ${portOwner(port)}`)
+  process.exit(1)
+}
 if (!existsSync(python)) {
   console.error('No Python environment. Run: python -m venv .venv, then install requirements (README "Setup").')
   process.exit(1)
@@ -99,7 +119,18 @@ if (tunnel) {
 
 const where = tunnel ? `${publicUrl} (via http://localhost:${port})` : `http://localhost:${port}`
 step(`Run on ${where}${mock ? ' (PROVIDER=mock)' : ''}   Ctrl+C to stop`)
-run(python, ['-m', 'uvicorn', 'app.main:app', '--port', port], {
+// The server watches a pipe from this script and exits when it closes, which the OS does however
+// this script ends (Ctrl+C, a closed window, a killed process). Without it, a killed run on Windows
+// leaves the server answering on the port with an old build.
+const serve = [
+  'import os, sys, threading, uvicorn',
+  'threading.Thread(target=lambda: (sys.stdin.read(), os._exit(0)), daemon=True).start()',
+  `sys.argv = ['uvicorn', 'app.main:app', '--port', ${JSON.stringify(String(port))}]`,
+  'uvicorn.main()',
+].join('\n')
+const server = spawn(python, ['-c', serve], {
+  cwd: root,
+  stdio: ['pipe', 'inherit', 'inherit'],
   env: {
     ...process.env,
     ...(mock ? { PROVIDER: 'mock' } : {}),
@@ -107,3 +138,12 @@ run(python, ['-m', 'uvicorn', 'app.main:app', '--port', port], {
     ...(tunnel ? { PUBLIC_BASE_URL: publicUrl } : {}),
   },
 })
+// A normal exit also stops it directly; the port check above is the last line of defence.
+function stopServer() {
+  if (server.exitCode !== null || !server.pid) return
+  if (win) spawnSync('taskkill', ['/PID', String(server.pid), '/T', '/F'], { stdio: 'ignore' })
+  else server.kill('SIGTERM')
+}
+process.on('exit', stopServer)
+for (const sig of ['SIGINT', 'SIGTERM', 'SIGHUP', 'SIGBREAK']) process.on(sig, () => process.exit(130))
+server.on('exit', (code) => process.exit(code ?? 0))

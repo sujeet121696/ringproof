@@ -151,7 +151,15 @@
     pinned Python deps (`requirements.lock`), `pip-audit` + `npm audit` clean; `npm run local` /
     `npm run check` (one command: clean, lint, build, tests, audit, serve); `npm run local:tunnel`
     serves the public demo on 8200 with the public URL and starts cloudflared if needed. Checked in Chrome:
-    page, a full call and the privacy page work under the CSP
+    page, a full call and the privacy page work under the CSP. Oct 24: certifi + opentelemetry-api
+    bumped (PYSEC-2026-4320, CVE-2026-114603), audit clean again. `npm run local` now refuses a
+    busy port (names the process) and its server exits with it, even on a hard kill (tested)
+26d. [x] Design review, Oct 24, with Taste Skill v2 (github.com/Leonxlnx/taste-skill, MIT; review
+    mode only, `inspect.mjs --app`, run from a scratch clone, nothing installed in the repo).
+    Fixed: icons in tinted circles on the start screen; phone header wrapping to two rows (now one,
+    mark only, so "What to do" fits on the first phone screen); "About you" inputs overflowing their
+    card (`box-sizing`). Left: wordmark green (logo, exempt) and the empty space under the short start
+    screen. Checked after: inspector, screenshots at 1440/390, axe on every screen light + dark
 27. [x] Lock the logo font (convert text to fixed shapes) and add PNG/ICO favicon fallbacks
     (Oct 7: redesigned in the kharidwise style; full icon set + manifest; `assets/build/`)
 28. [ ] Deploy to a public **demo URL** (required)

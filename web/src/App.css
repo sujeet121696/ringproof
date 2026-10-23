@@ -30,6 +30,15 @@
   cursor: pointer;
 }
 .tabs button.on { background: var(--fg); color: var(--bg); }
+.tabs button { white-space: nowrap; }
+
+/* Phones: keep the header on one row so the risk card sits higher. The mark stays; the link keeps
+   its "Ringproof home" name for screen readers. */
+@media (max-width: 480px) {
+  .site-head { flex-wrap: nowrap; gap: 8px; padding: 10px 16px; }
+  .brand .word { display: none; }
+  .tabs button { padding: 6px 10px; }
+}
 
 /* Settings: one gear button, a small panel with one section per setting */
 .settings { position: relative; }
@@ -119,10 +128,8 @@
 .steps li:nth-child(2) { animation-delay: 0.08s; }
 .steps li:nth-child(3) { animation-delay: 0.16s; }
 .steps .muted { font-size: 0.9rem; line-height: 1.45; }
-.step-icon {
-  display: grid; place-items: center; width: 44px; height: 44px; border-radius: 999px;
-  color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent);
-}
+/* Plain icon in the text colour, no tinted circle (the commonest generated-dashboard tell). */
+.step-icon { display: grid; place-items: center; color: var(--fg); }
 
 /* Call status: live dot, which call, progress */
 .call-status {
@@ -259,6 +266,7 @@
 .memory-view input, .memory-view textarea, .memory-view select {
   font: inherit; color: var(--fg); background: var(--bg);
   border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; min-width: 0; width: 100%;
+  box-sizing: border-box;
 }
 .memory-view textarea { resize: vertical; }
 .memory-view label { display: grid; gap: 4px; font-size: 0.85rem; color: var(--muted); font-weight: 600; }

@@ -96,6 +96,8 @@ an icon set.
   (`SettingsMenu.tsx`): Theme (icon-only switch: half circle = Auto, sun = Light, moon = Dark; names in the tooltip and for screen readers) and App (Install). New
   settings are added there as their own section, so the header stays the same. Icons are
   original line drawings in `components/icons.tsx` (no icon library).
+- Oct 24 (Taste Skill review, see TASKS 26d): phones (≤480 px) show the mark only, so the header
+  stays one row; the start screen's step icons are plain, in the text colour, with no tinted circle.
 - Call view: sample picker, speed, Play. Transcript left (caller lines with a red edge and signal
   tags when flagged). Right column top to bottom: Risk (3-segment meter, level word, rationale,
   "checking…" while a check runs), What to do (the climax), Caller (claimed person + their memory,
