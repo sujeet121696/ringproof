@@ -12,6 +12,7 @@
   background: var(--card-bg);
   border-bottom: 1px solid var(--line);
 }
+.brand-title { margin: 0; font: inherit; }
 .brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--fg); }
 .brand img { display: block; }
 .brand .word { font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; letter-spacing: -0.02em; }
@@ -100,7 +101,7 @@
   cursor: pointer;
 }
 .controls button.go { background: var(--fg); color: var(--bg); }
-.controls button.stop { background: var(--risk-high); color: #fff; }
+.controls button.stop { background: var(--risk-high); color: var(--on-risk-high); }
 .controls button:disabled { opacity: 0.5; cursor: default; }
 
 .empty { text-align: center; padding: 40px 24px; }
@@ -250,7 +251,7 @@
   font-weight: 800;
   background: var(--line);
 }
-.signals li.lit .mark { background: var(--risk-high); color: #fff; }
+.signals li.lit .mark { background: var(--risk-high); color: var(--on-risk-high); }
 .signals q { display: block; font-size: 0.9rem; color: var(--muted); margin-top: 2px; }
 
 /* Family memory view */
@@ -281,7 +282,7 @@
 }
 .btn.small { padding: 3px 10px; font-size: 0.8rem; }
 .btn.go { background: var(--fg); color: var(--bg); border-color: var(--fg); }
-.btn.danger { background: var(--risk-high); color: #fff; border-color: var(--risk-high); }
+.btn.danger { background: var(--risk-high); color: var(--on-risk-high); border-color: var(--risk-high); }
 .btn:disabled { opacity: 0.5; cursor: default; }
 .row-btns { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .contact-cards {

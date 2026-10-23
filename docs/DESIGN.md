@@ -82,7 +82,7 @@ an icon set.
 | `--accent-green` | AI Green `#00C853` | same | Fills and badges only, never small text (fails contrast on white) |
 | `--accent-cyan` | Cyan `#00B0FF` | same | Highlights, hovers |
 | `--accent-lavender`, `--note-bg` | `#D1C4E9`, `#F3EFFA` | same, `#211F2B` | **Family memory** cards and notes |
-| `--risk-low` / `--risk-medium` / `--risk-high` | `#00C853` / `#FFB300` / `#D32F2F` | high: `#EF5350` | Risk meter. Always paired with a word ("High risk") and shape, never colour alone |
+| `--risk-low` / `--risk-medium` / `--risk-high` | `#00C853` / `#FFB300` / `#C62828` | high: `#F26B68` | Risk meter. Always paired with a word ("High risk") and shape, never colour alone. Reds darkened Oct 15 so 12px tags pass 4.5:1; text on a red fill uses `--on-risk-high` (white in light, `#14161A` in dark) |
 
 - **Fonts:** Bricolage Grotesque 700–800 for headings and the risk level, Figtree 400–700 for text.
   Self-hosted in `web/public/fonts/` (SIL Open Font License), copied from kharidwise.

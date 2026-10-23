@@ -42,12 +42,17 @@
 5. [x] Smoke test: call Nemotron 3 Ultra on Nebius with a hard-coded transcript
     (`nvidia/Nemotron-3-Ultra-550b-a55b`, Oct 6: correct high score + JSON, ~4.8 s, ~530 tokens)
 6. [ ] Smoke test: transcribe one audio clip with Parakeet/Canary
+    - [x] Oct 23: GPU VM as Terraform (`infra/gpu/`): L40S `gpu-l40s-a` in eu-north1, firewall SSH
+      from one IP, disk + IP deleted with the VM; service-account sign-in, key outside the repo.
+      `terraform validate` passes (provider 0.6.73). Not yet applied: needs the service account
 7. [ ] Language test (stretch go/no-go): one Hinglish clip → Whisper/IndicConformer on Nebius →
     Nemotron. If signals are caught correctly, keep Hindi/Hinglish; otherwise drop to post-hackathon
 8. [ ] Write and record English sample calls (synthetic or consented only): digital-arrest scam,
     fake-family-member scam, real family call, real bank call
     - [x] Scripts written as timed transcripts with expected results (`samples/calls/`, Oct 6)
-    - [ ] Record audio
+    - [x] Oct 23: synthetic audio for all 10 (`scripts/synth_sample_audio.py`: Windows voice,
+      caller pitched down; `samples/audio/`, git-ignored). Real voices optional, for the video
+    - [ ] Record audio (real voices, consented)
 9. [x] Write the demo family: Maa + Sujeet, Suvaani, Shivam, Sahni profiles + household rules
     (`samples/family.json`; real first names with consent, all other details made up)
 
@@ -135,7 +140,13 @@
     https://ringproof.kharidwise.com behind Cloudflare Access (reported by Sujeet: working)
 26b. [x] Compliance pass, Oct 13: Privacy and terms page + footer (no cookies, analytics or
     third-party fonts; data flows listed per service), in-app memory note made complete, and every
-    email says why it came and how to stop it. Not done: Lighthouse/axe accessibility run
+    email says why it came and how to stop it
+    - [x] Oct 15: accessibility run. Lighthouse (call screen, light) 96/100; axe 4.14 (WCAG 2.2 AA +
+      best practice) on call idle, call at high risk, memory, privacy and 375 px, light and dark.
+      Fixed: risk meter name, transcript box keyboard-scrollable, "Who to alert" select label,
+      `<h1>` on the page, red tags and dark "Delete all" button below 4.5:1 (reds retuned, see
+      DESIGN §5). Now 0 violations except the green "proof" in the wordmark (2.23:1), left as is:
+      logotypes are exempt (WCAG 1.4.3). Not checked: a real screen reader (NVDA/TalkBack)
 26c. [x] Security pass, Oct 13: `/ws/call` origin check, uploads per visitor per hour, CSP + HSTS,
     pinned Python deps (`requirements.lock`), `pip-audit` + `npm audit` clean; `npm run local` /
     `npm run check` (one command: clean, lint, build, tests, audit, serve); `npm run local:tunnel`

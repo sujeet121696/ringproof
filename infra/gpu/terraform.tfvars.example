@@ -1,0 +1,6 @@
+# Copy to terraform.tfvars (git-ignored) and fill in. See README.md for where each value comes from.
+project_id         = "project-..."
+subnet_id          = "vpcsubnet-..."
+service_account_id = "serviceaccount-..."
+public_key_id      = "publickey-..."
+ssh_cidr           = "x.x.x.x/32" # your public IP

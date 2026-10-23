@@ -24,7 +24,7 @@ export function Transcript(props: { turns: Turn[]; signals: Signal[]; userName: 
   }, [props.turns.length])
 
   return (
-    <section ref={box} className="card transcript" aria-label="Live transcript">
+    <section ref={box} className="card transcript" aria-label="Live transcript" tabIndex={0}>
       <h2>Live transcript</h2>
       <ol className="lines" aria-live="polite">
         {props.turns.map((turn, i) => {

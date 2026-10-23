@@ -27,10 +27,12 @@ function App() {
     <>
       <header className="site-head">
         {/* Mark + text wordmark, as kharidwise does (kharid<b>wise</b>), so it follows the app's theme. */}
-        <a className="brand" href="/" aria-label="Ringproof home">
-          <img src="/logo-mark.svg" alt="" width="34" height="34" />
-          <span className="word">Ring<b>proof</b></span>
-        </a>
+        <h1 className="brand-title">
+          <a className="brand" href="/" aria-label="Ringproof home">
+            <img src="/logo-mark.svg" alt="" width="34" height="34" />
+            <span className="word">Ring<b>proof</b></span>
+          </a>
+        </h1>
         <nav className="tabs" aria-label="Views">
           <button className={tab === 'call' ? 'on' : ''} onClick={() => setTab('call')}>Call</button>
           <button className={tab === 'memory' ? 'on' : ''} onClick={() => setTab('memory')}>Family memory</button>

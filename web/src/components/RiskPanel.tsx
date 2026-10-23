@@ -11,7 +11,7 @@ export function RiskMeter(props: { risk: RiskResult | null; checking: boolean; l
         <h2>Risk</h2>
         {props.checking && <span className="checking">checking…</span>}
       </div>
-      <div className="meter" role="meter" aria-valuemin={0} aria-valuemax={2}
+      <div className="meter" role="meter" aria-label="Risk level" aria-valuemin={0} aria-valuemax={2}
         aria-valuenow={level ? ['low', 'medium', 'high'].indexOf(level) : 0}
         aria-valuetext={level ? LEVEL_TEXT[level] : 'Not assessed yet'}>
         {(['low', 'medium', 'high'] as const).map((l) => (

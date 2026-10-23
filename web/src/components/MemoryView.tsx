@@ -130,7 +130,7 @@ export function MemoryView(props: { memory: FamilyMemory; onChange: (m: FamilyMe
         <section className="card">
           <h2>Who to alert</h2>
           <p className="muted small">Told when a call looks like a scam.</p>
-          <select value={m.alert_contact ?? ''} onChange={(e) => set({ alert_contact: e.target.value || null })}>
+          <select aria-label="Who to alert" value={m.alert_contact ?? ''} onChange={(e) => set({ alert_contact: e.target.value || null })}>
             <option value="">No one</option>
             {m.contacts.map((c) => <option key={c.id} value={c.id}>{c.name} ({c.relation})</option>)}
           </select>

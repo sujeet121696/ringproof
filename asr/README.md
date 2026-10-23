@@ -6,6 +6,9 @@ the Ringproof app for uploaded recordings and the Vobiz phone line. See `server.
 Nebius Token Factory has no speech models, so this runs on a Nebius AI Cloud GPU VM. **Billed per
 hour while the VM runs: delete it when done.** An L40S is plenty (Parakeet is 0.6B parameters).
 
+Create the VM with Terraform: see [`infra/gpu/README.md`](../infra/gpu/README.md) (`terraform apply`, then
+`terraform destroy` when done).
+
 ## Run on the GPU VM
 
 ```bash

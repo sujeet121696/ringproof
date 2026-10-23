@@ -48,6 +48,7 @@ ringproof/
 ├── app/        backend: FastAPI, call sources, brain, risk engine, policy, tools (lookup, verify, mailer)
 ├── web/        dashboard: React + Vite
 ├── asr/        speech service (Python + NeMo: Parakeet + Sortformer) on a Nebius AI Cloud GPU
+├── infra/gpu/  Terraform for that GPU VM (L40S, SSH from one IP; apply / destroy)
 ├── samples/    sample call scripts, recordings' transcripts (`transcripts/`), recordings (`audio/`, git-ignored)
 ├── assets/     logo + favicon
 └── docs/

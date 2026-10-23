@@ -23,7 +23,8 @@
   /* Risk levels (Ringproof only). Fills with dark text; never colour alone, always a label too. */
   --risk-low: #00c853;
   --risk-medium: #ffb300;
-  --risk-high: #d32f2f;
+  --risk-high: #c62828;
+  --on-risk-high: #ffffff;
   --risk-high-bg: #fdecea;
 }
 
@@ -36,7 +37,8 @@
     --accent: #00b0ff;
     --note-bg: #211f2b;
     --card-bg: #1a1d22;
-    --risk-high: #ef5350;
+    --risk-high: #f26b68;
+    --on-risk-high: #14161a;
     --risk-high-bg: #3a1f22;
   }
 }
@@ -49,7 +51,8 @@
   --accent: #00b0ff;
   --note-bg: #211f2b;
   --card-bg: #1a1d22;
-  --risk-high: #ef5350;
+  --risk-high: #f26b68;
+  --on-risk-high: #14161a;
   --risk-high-bg: #3a1f22;
 }
 

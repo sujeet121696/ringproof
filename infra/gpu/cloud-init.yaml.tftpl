@@ -1,0 +1,15 @@
+#cloud-config
+# Key-only login for one user; no passwords, no root login.
+users:
+  - name: ${username}
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ${ssh_public_key}
+ssh_pwauth: false
+disable_root: true
+package_update: true
+packages:
+  - ffmpeg
+  - python3-venv
+  - git

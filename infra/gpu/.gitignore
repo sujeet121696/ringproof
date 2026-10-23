@@ -1,0 +1,6 @@
+# State holds resource IDs and the VM's user data; values are per person. Keep both local.
+.terraform/
+*.tfstate
+*.tfstate.*
+terraform.tfvars
+crash.log
