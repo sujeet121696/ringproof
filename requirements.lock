@@ -1,4 +1,5 @@
-# Exact versions tested together (pip freeze, Oct 13 2026, Python 3.12, Windows).
+# Exact versions tested together (pip freeze, Oct 13 2026, Python 3.12, Windows; certifi and
+# opentelemetry-api bumped Oct 24 for PYSEC-2026-4320 and CVE-2026-114603).
 # Install with: pip install -r requirements.txt -c requirements.lock
 # Linux adds uvloop via uvicorn[standard]; constraints allow that. Refresh after upgrading.
 annotated-doc==0.0.5
@@ -6,7 +7,7 @@ annotated-types==0.8.0
 anyio==4.15.1
 boolean.py==5.0
 CacheControl==0.14.4
-certifi==2026.7.22
+certifi==2026.10.19
 charset-normalizer==3.5.2
 click==8.5.0
 colorama==0.4.6
@@ -24,7 +25,7 @@ license-expression==30.4.4
 markdown-it-py==4.2.0
 mdurl==0.1.2
 msgpack==1.2.3
-opentelemetry-api==1.45.0
+opentelemetry-api==1.45.1
 packageurl-python==0.17.6
 packaging==26.3
 pip-requirements-parser==32.0.1
