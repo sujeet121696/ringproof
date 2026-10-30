@@ -12,4 +12,19 @@ package_update: true
 packages:
   - ffmpeg
   - python3-venv
+  - python3-dev
+  - build-essential
+  - libsndfile1
   - git
+# Install the speech service's Python packages and download both models on first boot, so the
+# service starts in seconds once asr/server.py is copied over. Progress: /var/log/asr-setup.log;
+# /opt/asr/READY appears when done.
+runcmd:
+  - mkdir -p /opt/asr && chown ${username}:${username} /opt/asr
+  - >-
+    sudo -u ${username} bash -c '
+    cd /opt/asr && python3 -m venv .venv &&
+    .venv/bin/pip install -q --upgrade pip &&
+    .venv/bin/pip install -q "nemo_toolkit[asr]" "fastapi>=0.115" "uvicorn[standard]>=0.32" &&
+    .venv/bin/python -c "import nemo.collections.asr as a; from nemo.collections.asr.models import SortformerEncLabelModel as S; a.models.ASRModel.from_pretrained(model_name=\"nvidia/parakeet-tdt-0.6b-v2\"); S.from_pretrained(\"nvidia/diar_sortformer_4spk-v1\")" &&
+    touch /opt/asr/READY' > /var/log/asr-setup.log 2>&1

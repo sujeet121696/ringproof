@@ -9,11 +9,13 @@ variable "subnet_id" {
 }
 
 variable "service_account_id" {
+  default     = ""
   description = "Service account ID (serviceaccount-...) that Terraform signs in as."
   type        = string
 }
 
 variable "public_key_id" {
+  default     = ""
   description = "ID of the authorized key uploaded for that service account (publickey-...)."
   type        = string
 }

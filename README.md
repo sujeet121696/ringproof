@@ -7,7 +7,7 @@
 Ringproof listens to a call, transcribes it live, and checks what's being said against a private memory of your family: how each trusted contact talks, what they usually ask for, and a shared code word. A call that's unusual *for that person* (urgency + secrecy + a money ask) triggers a personal verification challenge ("ask for the family code word") and alerts a trusted contact before money moves. Your memory stays yours: view it, edit it, delete it; calls are never stored.
 
 > Built for the **Nebius × NVIDIA Global AI Hackathon** — Track: **Personal AI**.
-> **Demo:** https://ringproof.kharidwise.com · **Video:** VIDEO_LINK
+> **Demo:** https://ringproof.kharidwise.com · **Video:** https://www.youtube.com/watch?v=ZgwzwPnLL_w
 >
 > Status: **working demo on 10 sample calls** (risk engine, family memory, code word, "Is this
 > you?" check, official lookup, email alerts), all scored live by Nemotron 3 Ultra on Nebius.
@@ -71,7 +71,9 @@ Demo scope: sample calls through a dashboard, not live telephony interception (a
 (`scripts/eval_samples`, 2–13 s per call), and on all 10 the risk rose at the right turn: scams
 went high at the money, OTP or "officer" demand, and real calls stayed low throughout
 (`scripts/eval_timeline`). The samples are scripted: 5 scams and 5 real calls from the demo
-family, with expected results written before running.
+family, with expected results written before running. The model is not fully repeatable: in four
+more runs of "real son asks for a small, usual amount" that evening, it went high twice (a code-word
+challenge on a real call), medium once and low once.
 
 ## Run locally
 

@@ -84,6 +84,6 @@ feedback in `docs/FEEDBACK.md` (paste into the feedback field)
 - [ ] Repo public (it was private on Oct 30)
 - [ ] Cloudflare Access app for `ringproof` removed; demo opens in a private window without login
 - [ ] PC and tunnel stay on until judging ends (`npm run local:tunnel`)
-- [ ] Video uploaded (YouTube unlisted or Vimeo), ≤ 3:00, link in the README (`VIDEO_LINK`)
+- [x] Video uploaded: https://www.youtube.com/watch?v=ZgwzwPnLL_w (2:46, unlisted), link in the README
 - [ ] Track: Personal AI; Best Use of Tavily if the form asks
 - [ ] Feedback pasted from `docs/FEEDBACK.md`

@@ -92,3 +92,42 @@ def test_closing_mid_call_stops_checks_and_closes_links():
     session, tokens = asyncio.run(go())
     assert session._task.cancelled()
     assert not checks.is_open(tokens[0])
+
+
+class ScriptedBrain:
+    """Returns the given results in order, one per check."""
+
+    name = "scripted"
+
+    def __init__(self, results: list[RiskResult]) -> None:
+        self.results = results
+
+    async def assess(self, req: AssessRequest) -> RiskResult:
+        await asyncio.sleep(0)
+        return self.results.pop(0) if len(self.results) > 1 else self.results[0]
+
+
+def test_a_later_medium_turn_never_softens_hang_up():
+    # Seen on Oct 30: high (hang up, call 1930), then one medium turn sent "be careful" for the
+    # first time, and the screen showed it in place of "hang up".
+    brain = ScriptedBrain([
+        RiskResult(score="high", rationale="", claimed_org="CBI"),
+        RiskResult(score="medium", rationale="", claimed_org="CBI"),
+        RiskResult(score="high", rationale="", claimed_org="CBI"),
+    ])
+
+    async def go() -> list[dict]:
+        events: list[dict] = []
+
+        async def send(ev: dict) -> None:
+            events.append(ev)
+
+        session = CallSession(brain, send, CONTACTS, [], alert_contact="sujeet")
+        for i in range(3):
+            await session.add_turn(caller(f"line {i}"))
+            await asyncio.sleep(0.01)
+        await session.finish()
+        return events
+
+    kinds = [e["action"]["kind"] for e in asyncio.run(go()) if e["type"] == "action"]
+    assert "hang_up_helpline" in kinds and "watch" not in kinds

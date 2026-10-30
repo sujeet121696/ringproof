@@ -181,7 +181,19 @@
 30. [ ] Full dry run with every sample on the deployed URL, and fix what breaks
     - [x] Oct 30, locally on Nemotron 3 Ultra: `eval_samples` 10/10, `eval_timeline` 10/10; README
       screenshots taken from real-model runs (`docs/screenshots/`). Public URL: after Access is off
-    - GPU/Parakeet dropped for the deadline (no time to set up); README and feedback say so
+    - GPU/Parakeet dropped: creating the VM needed billing details + a $25 card top-up (Oct 30),
+      not taken; README and feedback say so. VM never created, token deleted
+    - [x] Oct 30, found while recording the video at 2×, both fixed with `npm run check` passing:
+      a medium turn after "hang up" sent "be careful" for the first time and the screen showed it
+      instead (`app/session.py` now never sends it after a stronger action; test added); and if
+      Maa asked for the code word before the slower challenge arrived, the caller never failed it
+      (`web/src/useCall.ts` now remembers she asked)
+    - [x] Oct 30 evening, all 10 samples at 2× through the public URL: scams and other real calls
+      as expected; "real son, small ask" went high in 2 of 4 runs (model variance, noted in README
+      and FEEDBACK). Cloudflare was injecting Web Analytics + a bot-check script (blocked by the
+      CSP, but console errors): HTML now sends `Cache-Control: no-transform` (`app/main.py`)
+    - [x] Oct 30: demo video (2:46) recorded from the dashboard on real Nemotron 3 Ultra runs,
+      narration by Microsoft neural text-to-speech (en-IN Neerja)
 30a. [ ] **Stretch, only if M3 is done by Oct 18:** a live call through a Vobiz number
     (Vobiz call source → Parakeet on GPU → same agent), recorded for the demo video only.
     Listen-only; the agent talking back stays post-hackathon (VISION §3a)

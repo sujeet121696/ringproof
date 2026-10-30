@@ -63,13 +63,16 @@ export function useCall(memory: FamilyMemory | null) {
 
   const codeWordStep = (turn: Turn) => {
     const c = live.current
+    const text = ` ${normalise(turn.text)} `
+    // The user may ask before the challenge reaches the screen (a slow check): that still counts.
+    if (turn.speaker === 'user') {
+      if (text.includes(' word ')) c.asked = true
+      return
+    }
     if (c.challenge?.status !== 'waiting') return
     const word = memoryRef.current?.contacts.find((x) => x.id === c.challenge!.target)?.code_word
     if (!word) return
-    const text = ` ${normalise(turn.text)} `
-    if (turn.speaker === 'user') {
-      if (text.includes(' word ')) c.asked = true
-    } else if (text.includes(` ${normalise(word)} `)) {
+    if (text.includes(` ${normalise(word)} `)) {
       c.challenge = { ...c.challenge, status: 'passed' }
     } else if (c.asked && ++c.replies >= REPLIES_BEFORE_FAIL) {
       c.challenge = { ...c.challenge, status: 'failed' }

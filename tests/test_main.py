@@ -79,8 +79,8 @@ def test_dashboard_caching_hashed_assets_long_everything_else_rechecked():
     client = TestClient(main.app)
     asset = next((DIST / "assets").glob("*.js")).name
     assert "immutable" in client.get(f"/assets/{asset}").headers["cache-control"]
-    for path in ("/", "/sw.js"):
-        assert client.get(path).headers["cache-control"] == "no-cache"
+    assert client.get("/").headers["cache-control"] == "no-cache, no-transform"
+    assert client.get("/sw.js").headers["cache-control"] == "no-cache"
     assert client.get("/api/health").headers["x-frame-options"] == "DENY"
 
 

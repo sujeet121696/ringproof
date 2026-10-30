@@ -63,6 +63,11 @@ def upload_allowed(request: Request) -> bool:
 async def security_headers(request, call_next):
     response = await call_next(request)
     response.headers.update(SECURITY_HEADERS)
+    # Stops proxies (Cloudflare Web Analytics, bot checks) injecting scripts into our pages: no
+    # third-party scripts, and the CSP would block them anyway, leaving console errors.
+    if response.headers.get("content-type", "").startswith("text/html"):
+        cc = response.headers.get("cache-control")
+        response.headers["Cache-Control"] = f"{cc}, no-transform" if cc else "no-transform"
     return response
 
 

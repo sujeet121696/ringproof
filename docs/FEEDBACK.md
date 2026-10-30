@@ -27,7 +27,9 @@
 - Oct 7 benchmark on our sample calls: 8/8 correct, median 2.2 s, the fastest of the four we
   tried.
 - Oct 30, final run before submitting: 10/10 sample calls correct (2–13 s each), and on all 10
-  the risk rose at the right turn when scored turn by turn.
+  the risk rose at the right turn when scored turn by turn. Later that day, through the public
+  demo at `temperature: 0`, results varied between runs: "real son asks for a small, usual amount"
+  went high in 2 of 4 runs, and checks took 3–16 s (vs 2–13 s that morning).
 - It judged calls against a family profile ("he always calls her Maa, never asks for money on the
   phone") without fine-tuning: real calls stayed low on every turn, scams went high at the money,
   OTP or "officer" demand (Oct 8, turn by turn).
@@ -62,7 +64,16 @@
   console, several manual steps. A Windows CLI, or a console button that issues a short-lived
   Terraform token, would remove that.
 - L40S was offered only in `eu-north1` (Oct 23), so the project has to be in that region.
-- We did not apply the Terraform before the deadline, so we have no GPU run to report.
+- Oct 30, trying to start the GPU: `terraform apply` got `PermissionDenied` on the project
+  (signed in as a tenant admin with a token from Cloud Shell), and uploading a service-account key
+  got `permission_denied` too. Creating the VM in the console then asked for billing details and a
+  $25 card top-up. So the hackathon credit did not cover a GPU VM without adding a card, and we
+  believe (not confirmed) that the missing billing details were also behind the API errors, which
+  only said "permission denied". An error that names the missing billing setup, or
+  a note in the hackathon credit's terms, would have saved us an hour. We chose not to add a card,
+  so we have no GPU run to report.
+- The console said Intel L40S (`gpu-l40s-a`) had no capacity in eu-north1 on Oct 30; AMD L40S
+  (`gpu-l40s-d`) did.
 - VM to host the demo: not done; the demo runs on the developer's PC behind a Cloudflare Tunnel.
 
 ## Tavily

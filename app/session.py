@@ -148,6 +148,11 @@ class CallSession:
                     "result": result.model_dump(),
                 })
                 for action in decide(result, self.profile, self.contacts, self.alert_contact):
+                    # The screen shows the latest instruction, so a later "be careful" must never
+                    # replace a stronger one already given (e.g. a medium turn after "hang up").
+                    stronger = self._issued - {"watch", "alert_guardian"}
+                    if action.kind == "watch" and stronger:
+                        continue
                     if action.kind not in self._issued:
                         self._issued.add(action.kind)
                         await self.send({"type": "action", "upto": upto, "action": action.model_dump()})
