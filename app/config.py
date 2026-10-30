@@ -18,6 +18,8 @@ class Settings(BaseSettings):
     smtp_port: int = 465
     smtp_user: str = ""
     smtp_pass: str = ""
+    # Sender address, when the SMTP login isn't one (e.g. Brevo's relay login). Empty = SMTP_USER.
+    smtp_from: str = ""
     # Demo contacts use @example.com (no real inbox): their mail goes here instead, if set.
     email_demo_redirect_to: str = ""
     # Emails go ONLY to these addresses (comma-separated) plus the demo redirect. Closed by

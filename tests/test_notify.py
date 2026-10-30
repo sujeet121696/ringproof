@@ -159,3 +159,16 @@ def test_a_line_break_in_the_address_is_not_sent(monkeypatch):
         assert str(err) == "the email address is not valid"
     else:
         raise AssertionError("expected NotSent")
+
+
+def test_the_sender_can_differ_from_the_smtp_login(monkeypatch):
+    # Relays such as Brevo log in with a generated user; mail must come from a verified sender.
+    from app.notify import EmailNotifier
+
+    sent = []
+    monkeypatch.setattr(settings, "smtp_user", "a1b2c3@smtp-brevo.com")
+    monkeypatch.setattr(settings, "smtp_from", "me@gmail.com")
+    monkeypatch.setattr(settings, "email_allowed_to", "son@gmail.com")
+    monkeypatch.setattr(EmailNotifier, "_send", staticmethod(sent.append))
+    asyncio.run(EmailNotifier().send("son@gmail.com", "s", "b"))
+    assert sent[0]["From"] == "Ringproof <me@gmail.com>"

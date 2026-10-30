@@ -52,7 +52,7 @@ class EmailNotifier:
             raise NotSent("no email address saved")
         msg = EmailMessage()
         try:
-            msg["From"] = f"Ringproof <{settings.smtp_user}>"
+            msg["From"] = f"Ringproof <{settings.smtp_from or settings.smtp_user}>"
             msg["To"] = delivery_address(to)
             msg["Subject"] = subject
         except ValueError as err:  # e.g. a line break in the address or subject

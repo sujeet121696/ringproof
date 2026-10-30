@@ -1,0 +1,13 @@
+.env
+.git
+.venv
+**/__pycache__
+**/node_modules
+web/dist
+samples/audio
+infra
+docs
+asr
+tests
+scripts
+assets

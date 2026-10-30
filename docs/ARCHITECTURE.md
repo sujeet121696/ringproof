@@ -74,6 +74,9 @@ ringproof/
 **Production run** (Oct 9): `cd web && npm run build`, then from the repo root
 `PUBLIC_BASE_URL=https://ringproof.kharidwise.com uvicorn app.main:app --port 8200` (no `--reload`). `npm run local:tunnel` does all of this (and starts the tunnel if it isn't
 running); `npm run local` builds and serves the same way on 8300.
+Hosted option (Oct 30): the `Dockerfile` runs the same server on a Render free web service, with
+`ringproof.kharidwise.com` pointed at it in Cloudflare DNS; email then goes through Brevo on
+port 2525 (`SMTP_FROM`), as Render free blocks 465/587. Until then, or as a fallback:
 A Cloudflare Tunnel maps `ringproof.kharidwise.com` to `http://localhost:8200`; one tunnel can
 serve several hostnames.
 
