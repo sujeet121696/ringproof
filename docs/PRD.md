@@ -130,7 +130,7 @@ generic scam classifiers. G2–G6 together are the differentiator.
 - **Most Valuable Feedback: $100 × 10** (write real, specific feedback).
 
 **Budget**
-- Free credit: $25 (event code `NEBIUS-DEVPOST-GLOBAL26`) + $25 (Nebius Builders Program) = **$50**.
+- Free credit: $25 (hackathon event code) + $25 (Nebius Builders Program) = **$50**.
   The repo must be public, so decide before submitting whether this code stays in it.
 - Model calls: cents. Nemotron 3 Ultra on Token Factory: $1 per 1M input, $3 per 1M output tokens (checked Oct 6); a scoring call is ~530 tokens.
 - GPU for transcription (Token Factory has no ASR models, so this is needed): about $1–3/hour, kept to a few

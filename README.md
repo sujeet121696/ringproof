@@ -7,8 +7,18 @@
 Ringproof listens to a call, transcribes it live, and checks what's being said against a private memory of your family: how each trusted contact talks, what they usually ask for, and a shared code word. A call that's unusual *for that person* (urgency + secrecy + a money ask) triggers a personal verification challenge ("ask for the family code word") and alerts a trusted contact before money moves. Your memory stays yours: view it, edit it, delete it; calls are never stored.
 
 > Built for the **Nebius × NVIDIA Global AI Hackathon** — Track: **Personal AI**.
-> Status: **working demo on sample calls** (risk engine, family memory, code word, "Is this you?"
-> check, official lookup, email alerts). Live audio transcription is in progress. Deadline: Oct 30.
+> **Demo:** https://ringproof.kharidwise.com · **Video:** VIDEO_LINK
+>
+> Status: **working demo on 10 sample calls** (risk engine, family memory, code word, "Is this
+> you?" check, official lookup, email alerts), all scored live by Nemotron 3 Ultra on Nebius.
+> Speech-to-text (Parakeet + Sortformer) is built and tested with a stand-in service, but has **not
+> yet run on a GPU**, so the demo plays the calls' transcripts at call speed.
+
+| A "CBI officer" call is caught | A fake son is asked for the family code word |
+|---|---|
+| ![Digital-arrest call at high risk: hang up, call 1930, official sources shown](docs/screenshots/digital-arrest.png) | ![Fake son call: the app asks Maa to request the family code word](docs/screenshots/fake-son-code-word.png) |
+| **The real son's call stays quiet** | **The family memory, kept in the browser** |
+| ![Real son calling about dinner: low risk, nothing needed](docs/screenshots/real-son-quiet.png) | ![Family memory: contacts, how they talk, household rules, who to alert](docs/screenshots/family-memory.png) |
 
 ## The Problem
 
@@ -41,12 +51,27 @@ Call audio ──▶ Parakeet/Canary ──▶ transcript
                                           + alert to a trusted contact
 ```
 
-- **Transcription:** NVIDIA Parakeet/Canary turns the call into text. English is primary; Hindi/Hinglish is a stretch goal.
+- **Transcription:** NVIDIA Parakeet (speech to text) and Sortformer (who spoke when), as a small service for a Nebius GPU (`asr/`). Built, not yet run on a GPU; the demo uses the calls' transcripts. English first; Hindi/Hinglish is post-hackathon.
 - **Memory:** a private profile for each trusted contact (how they talk, what they usually ask for, a family code word). You can view, edit and delete it; calls are never stored.
 - **Reasoning:** Nemotron 3 Ultra on Nebius scores the call against that memory, and against digital-arrest patterns (impersonated authority, isolation, secrecy, urgency, transfer ask).
 - **Action:** high-risk calls trigger a personal challenge, show the real official helpline (looked up with Tavily from official sites only), and alert a trusted contact.
 
 Demo scope: sample calls through a dashboard, not live telephony interception (a post-hackathon concern).
+
+## Built with Nebius, NVIDIA and Tavily
+
+| Part | What we use | Status |
+|---|---|---|
+| Reasoning | **Nemotron 3 Ultra** (`nvidia/Nemotron-3-Ultra-550b-a55b`) on **Nebius Token Factory**, JSON output, scores every caller turn against the family memory | Live in the demo |
+| Backup reasoning | **Nemotron 3 Super** on Token Factory, then keyword rules; the screen says when a backup answered | Live; tested by forcing Ultra to fail |
+| Official lookup | **Tavily** search limited to official domains (`.gov.in`, `rbi.org.in`, …); helpline numbers only from a verified table (1930) | Live |
+| Speech to text | **Parakeet** + **Sortformer** (NVIDIA NeMo) on a **Nebius AI Cloud** L40S GPU, created and destroyed with Terraform (`infra/gpu/`) | Built; not yet run on a GPU |
+
+**Results on Oct 30, Nemotron 3 Ultra:** all 10 sample calls scored as expected
+(`scripts/eval_samples`, 2–13 s per call), and on all 10 the risk rose at the right turn: scams
+went high at the money, OTP or "officer" demand, and real calls stayed low throughout
+(`scripts/eval_timeline`). The samples are scripted: 5 scams and 5 real calls from the demo
+family, with expected results written before running.
 
 ## Run locally
 

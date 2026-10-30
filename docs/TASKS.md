@@ -179,6 +179,9 @@
       can open the demo without a login
 29. [ ] If Hindi/Hinglish is in: record one Hinglish digital-arrest sample and add it to the demo
 30. [ ] Full dry run with every sample on the deployed URL, and fix what breaks
+    - [x] Oct 30, locally on Nemotron 3 Ultra: `eval_samples` 10/10, `eval_timeline` 10/10; README
+      screenshots taken from real-model runs (`docs/screenshots/`). Public URL: after Access is off
+    - GPU/Parakeet dropped for the deadline (no time to set up); README and feedback say so
 30a. [ ] **Stretch, only if M3 is done by Oct 18:** a live call through a Vobiz number
     (Vobiz call source → Parakeet on GPU → same agent), recorded for the demo video only.
     Listen-only; the agent talking back stays post-hackathon (VISION §3a)
