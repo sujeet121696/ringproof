@@ -192,6 +192,9 @@
       as expected; "real son, small ask" went high in 2 of 4 runs (model variance, noted in README
       and FEEDBACK). Cloudflare was injecting Web Analytics + a bot-check script (blocked by the
       CSP, but console errors): HTML now sends `Cache-Control: no-transform` (`app/main.py`)
+    - [x] Oct 30 21:45: demo moved off the PC to a Render free web service (Docker; its origin is
+      gcp-us-west1); DNS `ringproof` CNAME → `ringproof.onrender.com`
+      (DNS only); email via Resend SMTP on 2587. Checked: health, page, browser call, alert email
     - [x] Oct 30: demo video (2:46) recorded from the dashboard on real Nemotron 3 Ultra runs,
       narration by Microsoft neural text-to-speech (en-IN Neerja)
 30a. [ ] **Stretch, only if M3 is done by Oct 18:** a live call through a Vobiz number

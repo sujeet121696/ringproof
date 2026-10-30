@@ -74,7 +74,8 @@
   so we have no GPU run to report.
 - The console said Intel L40S (`gpu-l40s-a`) had no capacity in eu-north1 on Oct 30; AMD L40S
   (`gpu-l40s-d`) did.
-- VM to host the demo: not done; the demo runs on the developer's PC behind a Cloudflare Tunnel.
+- VM to host the demo: not done (same billing step). Since Oct 30 the demo runs on a free Render web
+  service (`Dockerfile`), with the domain in Cloudflare DNS; Nemotron is still called on Token Factory.
 
 ## Tavily
 

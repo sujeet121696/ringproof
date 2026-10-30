@@ -144,6 +144,9 @@ export function useCall(memory: FamilyMemory | null) {
     const proto = location.protocol === 'https:' ? 'wss' : 'ws'
     const socket = new WebSocket(`${proto}://${location.host}/ws/call`)
     ws.current = socket
+    // After `end` the call is over: a proxy that drops the socket without a close frame (Render
+    // gives 1006) must not show "Lost connection" under a finished call.
+    let finished = false
     socket.onopen = () =>
       socket.send(
         JSON.stringify({
@@ -162,6 +165,7 @@ export function useCall(memory: FamilyMemory | null) {
     socket.onmessage = (msg) => {
       if (ws.current !== socket) return // a newer call replaced this one
       const ev: CallEvent = JSON.parse(msg.data)
+      if (ev.type === 'end') finished = true
       if (ev.type === 'need_profile') {
         const contact = memoryRef.current?.contacts.find((x) => x.id === ev.contact)
         if (contact) socket.send(JSON.stringify({ type: 'profile', profile: profileForServer(contact) }))
@@ -170,12 +174,12 @@ export function useCall(memory: FamilyMemory | null) {
       handle(ev)
     }
     socket.onerror = () => {
-      if (ws.current === socket) setState((s) => ({ ...s, error: 'Lost connection to Ringproof.' }))
+      if (ws.current === socket && !finished) setState((s) => ({ ...s, error: 'Lost connection to Ringproof.' }))
     }
     // 1000 is the normal close after `end`. Anything else (busy, unknown sample, server gone)
     // shows the server's reason, so the screen never sits silently.
     socket.onclose = (e) => {
-      if (ws.current !== socket || e.code === 1000) return
+      if (ws.current !== socket || e.code === 1000 || finished) return
       setState((s) => ({
         ...s,
         status: s.status === 'live' ? 'ended' : s.status === 'waiting' ? 'idle' : s.status,
